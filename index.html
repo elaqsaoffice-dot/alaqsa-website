@@ -145,7 +145,17 @@
 <div id="adminPanel" class="modal hidden">
   <div class="modal-content admin-content">
     <h3>🛠 لوحة تحكم المسؤول</h3>
-
+<!-- 🔑 قسم التوكن - يظهر مرة واحدة فقط -->
+<div class="admin-section" id="tokenSection" style="background:#FFF8E1; border:2px solid #FFC107;">
+  <h4>🔑 إعداد الاتصال بـ GitHub</h4>
+  <p style="font-size:.85rem; color:#666; margin-bottom:12px;">
+    الصق التوكن مرة واحدة، وسيُحفظ في هذا المتصفح فقط (لا يُرفع أبداً على GitHub).
+  </p>
+  <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+  <button id="saveToken" class="btn-primary">💾 حفظ التوكن</button>
+  <p id="tokenStatus" style="font-size:.85rem; margin-top:10px;"></p>
+  <hr style="margin-top:15px;">
+</div>
     <div class="admin-section">
       <h4>شعار الشركة</h4>
       <input type="file" id="logoUpload" accept="image/*">
