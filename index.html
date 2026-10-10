@@ -407,19 +407,57 @@
     await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
   }
 
-  async function loadLogo() {
-    try {
-      const content = await readFromGitHub("logo.json");
-      if (content) {
-        const data = JSON.parse(content);
-        if (data.url) {
-          const img = document.getElementById("siteLogo");
-          img.src = data.url;
-          img.style.display = "block";
-        }
+ async function loadLogo() {
+  const img = document.getElementById("siteLogo");
+  const logoText = document.querySelector(".logo-text");
+
+  if (!img) return;
+
+  // إظهار النص افتراضياً (في حال فشل الشعار)
+  if (logoText) logoText.style.display = "block";
+
+  try {
+    const content = await readFromGitHub("logo.json");
+    if (!content) return;
+
+    const data = JSON.parse(content);
+    if (!data.url) return;
+
+    // إنشاء صورة جديدة للتحقق من التحميل
+    const testImg = new Image();
+
+    testImg.onload = () => {
+      // نجح التحميل — عرض الصورة
+      img.src = data.url;
+      img.style.display = "block";
+      // إخفاء النص إذا نجح الشعار
+      if (logoText) logoText.style.display = "none";
+      console.log("✅ تم تحميل الشعار بنجاح");
+    };
+
+    testImg.onerror = () => {
+      // فشل التحميل — إبقاء النص فقط
+      console.warn("⚠️ فشل تحميل الشعار — عرض النص فقط");
+      if (img) img.style.display = "none";
+      if (logoText) logoText.style.display = "block";
+    };
+
+    // بدء التحميل
+    testImg.src = data.url;
+
+    // Timeout بعد 5 ثوانٍ
+    setTimeout(() => {
+      if (testImg.complete && testImg.naturalHeight !== 0) {
+        // نجح التحميل
       }
-    } catch (e) {}
+    }, 5000);
+
+  } catch (e) {
+    console.warn("خطأ في تحميل الشعار:", e);
+    if (img) img.style.display = "none";
+    if (logoText) logoText.style.display = "block";
   }
+}
 
   async function loadProjects() {
     const grid = document.getElementById("projectsGrid");
