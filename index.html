@@ -221,7 +221,16 @@ function setToken(token) {
   // ════════════════════════════════════════════════════════════
   const API_BASE = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents`;
 
-  function apiHeaders() {
+ function apiHeaders() {
+  const token = getToken();
+  if (!token) {
+    throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن وأدخل التوكن أولاً.");
+  }
+  return {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json"
+  };
+}
     return {
       "Authorization": `token ${GITHUB_TOKEN}`,
       "Accept": "application/vnd.github.v3+json"
