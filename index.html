@@ -36,9 +36,9 @@
 
     <nav class="main-nav" id="mainNav">
       <a href="#home" class="nav-link active">الرئيسية</a>
+      <a href="#projects" class="nav-link">مشاريعنا</a>
       <a href="#about" class="nav-link">من نحن</a>
       <a href="#services" class="nav-link">خدماتنا</a>
-      <a href="#projects" class="nav-link">مشاريعنا</a>
       <a href="#contact" class="nav-link">اتصل بنا</a>
     </nav>
 
@@ -70,6 +70,23 @@
     <div class="hero-buttons">
       <a href="#projects" class="btn btn-white">استعرض أعمالنا</a>
       <a href="#contact" class="btn btn-outline">تواصل معنا</a>
+    </div>
+  </div>
+</section>
+
+<!-- Projects (في المقدمة) -->
+<section id="projects" class="section section-gray">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">🏗️ أعمالنا</span>
+      <h2 class="section-title">مشاريع تتحدث عن نفسها</h2>
+      <p class="section-subtitle">استعرض مجموعة من أفضل مشاريعنا المنفذة بأعلى معايير الجودة</p>
+    </div>
+
+    <div id="projectsGrid" class="projects-grid"></div>
+
+    <div class="view-all-wrap">
+      <a href="#contact" class="view-all-btn">اطلب مشروعك الآن</a>
     </div>
   </div>
 </section>
@@ -189,21 +206,8 @@
   </div>
 </section>
 
-<!-- Projects -->
-<section id="projects" class="section section-white">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">مشاريعنا</span>
-      <h2 class="section-title">أعمال تتحدث عن نفسها</h2>
-      <p class="section-subtitle">مجموعة مختارة من أفضل مشاريعنا المنفذة</p>
-    </div>
-
-    <div id="projectsGrid" class="projects-grid"></div>
-  </div>
-</section>
-
 <!-- Contact -->
-<section id="contact" class="section section-gray">
+<section id="contact" class="section section-white">
   <div class="container">
     <div class="section-header">
       <span class="section-label">تواصل معنا</span>
@@ -341,7 +345,7 @@
 
   function apiHeaders() {
     const token = getToken();
-    if (!token) throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن.");
+    if (!token) throw new Error("❌ لم يتم إعداد التوكن.");
     return {
       "Authorization": `token ${token}`,
       "Accept": "application/vnd.github.v3+json"
@@ -382,7 +386,6 @@
     return await res.json();
   }
 
-  // قراءة ملف بدون توكن
   async function readPublicFile(path) {
     const urls = [
       `https://elaqsaoffice-dot.github.io/alaqsa-website/${path}?t=${Date.now()}`,
@@ -398,7 +401,6 @@
     return null;
   }
 
-  // قراءة ملف مع توكن
   async function readFromGitHub(path) {
     const url = `${API_BASE}/${path}?t=${Date.now()}`;
     const res = await fetch(url, { headers: apiHeaders() });
@@ -428,7 +430,6 @@
   function loadLogoImage(url, img) {
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
-        console.warn("⏱ انتهت مهلة تحميل الشعار");
         img.style.display = "none";
         resolve(false);
       }, 8000);
@@ -436,7 +437,6 @@
       img.onload = () => {
         clearTimeout(timeout);
         img.style.display = "block";
-        console.log("✅ تم تحميل الشعار");
         resolve(true);
 
         try {
@@ -457,7 +457,6 @@
 
       img.onerror = () => {
         clearTimeout(timeout);
-        console.warn("⚠️ فشل تحميل الشعار:", url);
         img.style.display = "none";
         resolve(false);
       };
@@ -470,16 +469,13 @@
     const img = document.getElementById("siteLogo");
     if (!img) return;
 
-    // 1) localStorage
     const cached = localStorage.getItem("alaqsa_logo_data");
     if (cached && cached.length > 100) {
       img.src = cached;
       img.style.display = "block";
-      console.log("✅ الشعار من localStorage");
       return;
     }
 
-    // 2) اقرأ logo.json
     try {
       const content = await readPublicFile("logo.json");
       if (content) {
@@ -490,11 +486,8 @@
           if (success) return;
         }
       }
-    } catch (e) {
-      console.warn("فشل قراءة logo.json:", e);
-    }
+    } catch (e) {}
 
-    // 3) احتياطي
     const fallback = getImageUrlCDN("images/logo_1791627223517.png");
     await loadLogoImage(fallback, img);
   }
@@ -667,11 +660,11 @@
     function updateStatus() {
       const token = getToken();
       if (token) {
-        status.textContent = "✅ التوكن محفوظ في هذا المتصفح";
+        status.textContent = "✅ التوكن محفوظ";
         status.style.color = "#16A34A";
         tokenInput.value = token;
       } else {
-        status.textContent = "⚠️ لم يتم إعداد التوكن بعد";
+        status.textContent = "⚠️ لم يتم إعداد التوكن";
         status.style.color = "#DC2626";
       }
     }
@@ -747,7 +740,6 @@
       document.getElementById("adminPanel").classList.add("hidden");
     });
 
-    // Save Logo
     const saveLogoBtn = document.getElementById("saveLogo");
     if (saveLogoBtn) {
       saveLogoBtn.addEventListener("click", async () => {
@@ -782,7 +774,6 @@
       });
     }
 
-    // Add Project
     const addBtn = document.getElementById("addProject");
     if (addBtn) {
       addBtn.addEventListener("click", async () => {
@@ -860,7 +851,6 @@
     }
   });
 
-  // ═══════════════════ Secret Trigger ═══════════════════
   function bindSecretTrigger() {
     const trigger = document.getElementById("secretTrigger");
     if (!trigger) return;
@@ -885,7 +875,6 @@
     });
   }
 
-  // ═══════════════════ Count Up ═══════════════════
   function initCountUp() {
     const counters = document.querySelectorAll("[data-count]");
     if (!counters.length) return;
@@ -915,7 +904,6 @@
     counters.forEach(el => observer.observe(el));
   }
 
-  // ═══════════════════ Scroll Progress ═══════════════════
   function initScrollProgress() {
     const bar = document.getElementById("scrollProgress");
     const backBtn = document.getElementById("backToTop");
@@ -936,7 +924,6 @@
     });
   }
 
-  // ═══════════════════ Preloader ═══════════════════
   function initPreloader() {
     const preloader = document.getElementById("preloader");
     if (!preloader) return;
@@ -956,7 +943,6 @@
     }
   }
 
-  // ═══════════════════ Mobile Menu ═══════════════════
   function initMobileMenu() {
     const toggle = document.getElementById("menuToggle");
     const nav = document.getElementById("mainNav");
@@ -982,7 +968,6 @@
     });
   }
 
-  // ═══════════════════ Header Scroll ═══════════════════
   function initHeaderScroll() {
     const header = document.getElementById("header");
     if (!header) return;
@@ -1000,7 +985,6 @@
     }, { passive: true });
   }
 
-  // ═══════════════════ Active Nav ═══════════════════
   function initActiveNav() {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -1019,7 +1003,6 @@
     }, { passive: true });
   }
 
-  // ═══════════════════ Init ═══════════════════
   function init() {
     bindButtons();
     bindTokenUI();
