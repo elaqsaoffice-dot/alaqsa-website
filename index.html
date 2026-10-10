@@ -324,6 +324,7 @@
 (function() {
   'use strict';
 
+  // ═══════════════════ الإعدادات ═══════════════════
   const GITHUB_USERNAME = "elaqsaoffice-dot";
   const GITHUB_REPO = "alaqsa-website";
   const GITHUB_BRANCH = "main";
@@ -333,14 +334,16 @@
   const SECRET_CODE = "219";
   const ADMIN_PASSWORD = "AH219##";
 
+  // ═══════════════════ Token ═══════════════════
   function getToken() { return localStorage.getItem("alaqsa_github_token") || ""; }
   function setToken(t) { localStorage.setItem("alaqsa_github_token", t); }
 
+  // ═══════════════════ GitHub API ═══════════════════
   const API_BASE = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents`;
 
   function apiHeaders() {
     const token = getToken();
-    if (!token) throw new Error("❌ لم يتم إعداد التوكن.");
+    if (!token) throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن.");
     return {
       "Authorization": `token ${token}`,
       "Accept": "application/vnd.github.v3+json"
@@ -393,6 +396,7 @@
     return `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
   }
 
+  // ═══════════════════ Projects Data ═══════════════════
   async function loadProjectsData() {
     try {
       const content = await readFromGitHub(DATA_FILE);
@@ -407,62 +411,68 @@
     await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
   }
 
-async function loadLogo() {
-  const img = document.getElementById("siteLogo");
-  const logoText = document.querySelector(".logo-text");
-  if (!img) return;
+  // ═══════════════════ Logo ═══════════════════
+  async function loadLogo() {
+    const img = document.getElementById("siteLogo");
+    const logoText = document.querySelector(".logo-text");
+    if (!img) return;
 
-  // 1) تحقق أولاً من localStorage (سريع + بدون إنترنت)
-  const cachedLogo = localStorage.getItem("alaqsa_logo_data");
-  if (cachedLogo) {
-    img.src = cachedLogo;
-    img.style.display = "block";
-    if (logoText) logoText.style.display = "none";
-    console.log("✅ الشعار من التخزين المحلي");
-    return;
-  }
-
-  // 2) إذا لا يوجد، حاول التحميل من GitHub
-  try {
-    const content = await readFromGitHub("logo.json");
-    if (!content) return;
-
-    const data = JSON.parse(content);
-    if (!data.url) return;
-
-    img.onload = () => {
+    // 1) تحقق أولاً من localStorage (سريع + بدون إنترنت)
+    const cachedLogo = localStorage.getItem("alaqsa_logo_data");
+    if (cachedLogo) {
+      img.src = cachedLogo;
       img.style.display = "block";
       if (logoText) logoText.style.display = "none";
-      console.log("✅ تم تحميل الشعار");
+      console.log("✅ الشعار من التخزين المحلي");
+      return;
+    }
 
-      // حفظ نسخة Base64 في المتصفح للزيارات القادمة
-      try {
-        fetch(data.url)
-          .then(r => r.blob())
-          .then(blob => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              localStorage.setItem("alaqsa_logo_data", reader.result);
-            };
-            reader.readAsDataURL(blob);
-          });
-      } catch (e) {}
-    };
+    // 2) إذا لا يوجد، حاول التحميل من GitHub
+    try {
+      const content = await readFromGitHub("logo.json");
+      if (!content) return;
 
-    img.onerror = () => {
-      console.warn("⚠️ فشل تحميل الشعار — عرض النص");
+      const data = JSON.parse(content);
+      if (!data.url) return;
+
+      img.onload = () => {
+        img.style.display = "block";
+        if (logoText) logoText.style.display = "none";
+        console.log("✅ تم تحميل الشعار");
+
+        // حفظ نسخة Base64 للزيارات القادمة
+        try {
+          fetch(data.url)
+            .then(r => r.blob())
+            .then(blob => {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                try {
+                  localStorage.setItem("alaqsa_logo_data", reader.result);
+                } catch (e) {
+                  console.warn("لا يمكن حفظ الشعار محلياً:", e);
+                }
+              };
+              reader.readAsDataURL(blob);
+            });
+        } catch (e) {}
+      };
+
+      img.onerror = () => {
+        console.warn("⚠️ فشل تحميل الشعار — عرض النص");
+        img.style.display = "none";
+        if (logoText) logoText.style.display = "block";
+      };
+
+      img.src = data.url;
+    } catch (e) {
+      console.warn("خطأ في الشعار:", e);
       img.style.display = "none";
       if (logoText) logoText.style.display = "block";
-    };
-
-    img.src = data.url;
-  } catch (e) {
-    console.warn("خطأ:", e);
-    img.style.display = "none";
-    if (logoText) logoText.style.display = "block";
+    }
   }
-}
 
+  // ═══════════════════ Projects Display ═══════════════════
   async function loadProjects() {
     const grid = document.getElementById("projectsGrid");
     if (!grid) return;
@@ -513,6 +523,7 @@ async function loadLogo() {
       .replace(/"/g, "&quot;");
   }
 
+  // ═══════════════════ Lightbox ═══════════════════
   function openLightbox(src, title, desc) {
     const lb = document.createElement("div");
     lb.className = "lightbox";
@@ -550,6 +561,7 @@ async function loadLogo() {
     });
   }
 
+  // ═══════════════════ Modals ═══════════════════
   function openLogin() {
     const modal = document.getElementById("loginModal");
     const pwd = document.getElementById("adminPassword");
@@ -597,6 +609,7 @@ async function loadLogo() {
     });
   }
 
+  // ═══════════════════ Token UI ═══════════════════
   function bindTokenUI() {
     const tokenInput = document.getElementById("tokenInput");
     const saveBtn = document.getElementById("saveToken");
@@ -645,6 +658,7 @@ async function loadLogo() {
     updateStatus();
   }
 
+  // ═══════════════════ Buttons ═══════════════════
   function bindButtons() {
     const loginBtn = document.getElementById("loginBtn");
     const pwd = document.getElementById("adminPassword");
@@ -685,6 +699,7 @@ async function loadLogo() {
       document.getElementById("adminPanel").classList.add("hidden");
     });
 
+    // Save Logo
     const saveLogoBtn = document.getElementById("saveLogo");
     if (saveLogoBtn) {
       saveLogoBtn.addEventListener("click", async () => {
@@ -704,6 +719,11 @@ async function loadLogo() {
           const logoJson = btoa(JSON.stringify({ url }));
           await uploadToGitHub("logo.json", logoJson, "تحديث الشعار");
 
+          // حفظ مباشر في localStorage ليظهر فوراً
+          try {
+            localStorage.setItem("alaqsa_logo_data", `data:image/${ext};base64,${base64}`);
+          } catch (e) {}
+
           alert("✅ تم حفظ الشعار");
           location.reload();
         } catch (e) {
@@ -715,6 +735,7 @@ async function loadLogo() {
       });
     }
 
+    // Add Project
     const addBtn = document.getElementById("addProject");
     if (addBtn) {
       addBtn.addEventListener("click", async () => {
@@ -761,6 +782,7 @@ async function loadLogo() {
     }
   }
 
+  // ═══════════════════ Secret Code ═══════════════════
   let typedBuffer = "";
   let typedTimer = null;
 
@@ -791,6 +813,7 @@ async function loadLogo() {
     }
   });
 
+  // ═══════════════════ Secret Trigger ═══════════════════
   function bindSecretTrigger() {
     const trigger = document.getElementById("secretTrigger");
     if (!trigger) return;
@@ -815,6 +838,7 @@ async function loadLogo() {
     });
   }
 
+  // ═══════════════════ Count Up ═══════════════════
   function initCountUp() {
     const counters = document.querySelectorAll("[data-count]");
     if (!counters.length) return;
@@ -844,6 +868,7 @@ async function loadLogo() {
     counters.forEach(el => observer.observe(el));
   }
 
+  // ═══════════════════ Scroll Progress ═══════════════════
   function initScrollProgress() {
     const bar = document.getElementById("scrollProgress");
     const backBtn = document.getElementById("backToTop");
@@ -864,6 +889,7 @@ async function loadLogo() {
     });
   }
 
+  // ═══════════════════ Preloader ═══════════════════
   function initPreloader() {
     const preloader = document.getElementById("preloader");
     if (!preloader) return;
@@ -883,6 +909,7 @@ async function loadLogo() {
     }
   }
 
+  // ═══════════════════ Mobile Menu ═══════════════════
   function initMobileMenu() {
     const toggle = document.getElementById("menuToggle");
     const nav = document.getElementById("mainNav");
@@ -900,7 +927,7 @@ async function loadLogo() {
       });
     });
 
-    // إغلاق القائمة عند الضغط خارجها
+    // إغلاق عند الضغط خارج القائمة
     document.addEventListener("click", (e) => {
       if (nav.classList.contains("open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
         nav.classList.remove("open");
@@ -909,6 +936,7 @@ async function loadLogo() {
     });
   }
 
+  // ═══════════════════ Header Scroll ═══════════════════
   function initHeaderScroll() {
     const header = document.getElementById("header");
     if (!header) return;
@@ -926,6 +954,7 @@ async function loadLogo() {
     }, { passive: true });
   }
 
+  // ═══════════════════ Active Nav ═══════════════════
   function initActiveNav() {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -944,6 +973,7 @@ async function loadLogo() {
     }, { passive: true });
   }
 
+  // ═══════════════════ Init ═══════════════════
   function init() {
     bindButtons();
     bindTokenUI();
