@@ -74,7 +74,7 @@
   </div>
 </section>
 
-<!-- Projects (في المقدمة) -->
+<!-- Projects -->
 <section id="projects" class="section section-gray">
   <div class="container">
     <div class="section-header">
@@ -304,9 +304,11 @@
 
     <div class="admin-section">
       <h4>إضافة مشروع جديد</h4>
+      <p class="admin-help">📸 يمكنك اختيار أكثر من صورة لنفس المشروع — ستظهر معاً في بطاقة واحدة.</p>
       <input type="text" id="projTitle" placeholder="اسم المشروع">
       <textarea id="projDesc" placeholder="وصف المشروع"></textarea>
       <input type="file" id="projImage" accept="image/*" multiple>
+      <p id="projImageCount" class="admin-help" style="color:#0A4DA6; font-weight:700;"></p>
       <button id="addProject" class="btn-modal primary">إضافة المشروع</button>
     </div>
 
@@ -384,15 +386,6 @@
       throw new Error(err.message || "فشل الرفع");
     }
     return await res.json();
-  }
-
-  // جلب اسم الملف sha من GitHub (مهم للحذف)
-  async function getFileSha(path) {
-    const url = `${API_BASE}/${path}?t=${Date.now()}`;
-    const res = await fetch(url, { headers: apiHeaders() });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.sha;
   }
 
   async function readPublicFile(path) {
@@ -504,18 +497,14 @@
   // ═══════════════════ Projects Data ═══════════════════
   async function loadProjectsData() {
     try {
-      // جرّب مع التوكن أولاً (للأدمن — يضمن أحدث نسخة)
       const token = getToken();
       if (token) {
         try {
           const content = await readFromGitHub(DATA_FILE);
           if (content) return JSON.parse(content);
-        } catch (e) {
-          console.warn("فشل القراءة مع التوكن — جرب بدون توكن");
-        }
+        } catch (e) {}
       }
 
-      // بدون توكن
       const publicContent = await readPublicFile(DATA_FILE);
       if (publicContent) return JSON.parse(publicContent);
 
@@ -529,6 +518,18 @@
     const json = JSON.stringify(projects, null, 2);
     const content = btoa(unescape(encodeURIComponent(json)));
     await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
+  }
+
+  // ═══════════════════ Helper: الحصول على صور المشروع ═══════════════════
+  // يدعم الصيغتين: صورة واحدة قديمة، أو مصفوفة صور جديدة
+  function getProjectImages(project) {
+    if (Array.isArray(project.images) && project.images.length > 0) {
+      return project.images;
+    }
+    if (project.image) {
+      return [project.image];
+    }
+    return [];
   }
 
   // ═══════════════════ Projects Display ═══════════════════
@@ -551,26 +552,66 @@
     }
 
     projects.forEach((p) => {
+      const images = getProjectImages(p);
+      const firstImage = images[0] ? toCDN(images[0]) : "";
+      const hasMultiple = images.length > 1;
+
       const card = document.createElement("div");
       card.className = "project-card";
-      const imgUrl = toCDN(p.image);
+      card.dataset.projectIndex = projects.indexOf(p);
 
       card.innerHTML = `
         <div class="project-image">
-          <img src="${imgUrl}" alt="${escapeHtml(p.title)}" loading="lazy">
+          <img src="${firstImage}" alt="${escapeHtml(p.title)}" loading="lazy" class="project-main-img">
+          ${hasMultiple ? `
+            <div class="project-count-badge">
+              <span>📸 ${images.length} صور</span>
+            </div>
+          ` : ""}
           <div class="project-overlay">
             <span class="project-tag">مشروع منجز</span>
             <h3>${escapeHtml(p.title)}</h3>
             <p>${escapeHtml(p.description || "")}</p>
+            ${hasMultiple ? `
+              <div class="project-thumbs-row">
+                ${images.slice(0, 4).map((img, i) => `
+                  <div class="project-thumb ${i === 0 ? 'active' : ''}" data-img-index="${i}">
+                    <img src="${toCDN(img)}" alt="صورة ${i + 1}">
+                  </div>
+                `).join("")}
+                ${images.length > 4 ? `<div class="project-thumb-more">+${images.length - 4}</div>` : ""}
+              </div>
+            ` : ""}
           </div>
         </div>
         <div class="project-info">
           <h3>${escapeHtml(p.title)}</h3>
           <p>${escapeHtml(p.description || "")}</p>
+          ${hasMultiple ? `<span class="project-images-count">📸 ${images.length} صور</span>` : ""}
         </div>
       `;
 
-      card.addEventListener("click", () => openLightbox(imgUrl, p.title, p.description));
+      // النقر على الصورة المصغرة يغيّر الصورة الرئيسية
+      if (hasMultiple) {
+        const mainImg = card.querySelector(".project-main-img");
+        const thumbs = card.querySelectorAll(".project-thumb");
+
+        thumbs.forEach(thumb => {
+          thumb.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const idx = parseInt(thumb.dataset.imgIndex);
+            mainImg.src = toCDN(images[idx]);
+            thumbs.forEach(t => t.classList.remove("active"));
+            thumb.classList.add("active");
+          });
+        });
+      }
+
+      // النقر على البطاقة → فتح Lightbox مع كل الصور
+      card.addEventListener("click", () => {
+        openLightbox(images.map(img => toCDN(img)), p.title, p.description);
+      });
+
       grid.appendChild(card);
     });
   }
@@ -583,15 +624,44 @@
       .replace(/"/g, "&quot;");
   }
 
-  // ═══════════════════ Lightbox ═══════════════════
-  function openLightbox(src, title, desc) {
+  // ═══════════════════ Lightbox Pro (مع Slider) ═══════════════════
+  function openLightbox(images, title, desc) {
+    // دعم الصيغة القديمة (صورة واحدة كنص)
+    if (typeof images === "string") {
+      images = [images];
+    }
+
+    if (!Array.isArray(images) || images.length === 0) return;
+
+    let currentIndex = 0;
+
     const lb = document.createElement("div");
     lb.className = "lightbox";
     lb.innerHTML = `
       <div class="lightbox-bg"></div>
       <div class="lightbox-inner">
         <button class="lightbox-close" aria-label="إغلاق">✕</button>
-        <img src="${src}" alt="${escapeHtml(title || '')}">
+
+        <div class="lightbox-image-wrap">
+          <button class="lightbox-nav lightbox-prev" aria-label="السابق">‹</button>
+          <img src="${images[0]}" alt="${escapeHtml(title || '')}" class="lightbox-main-img">
+          <button class="lightbox-nav lightbox-next" aria-label="التالي">›</button>
+
+          ${images.length > 1 ? `
+            <div class="lightbox-counter">1 / ${images.length}</div>
+          ` : ""}
+        </div>
+
+        ${images.length > 1 ? `
+          <div class="lightbox-thumbs">
+            ${images.map((img, i) => `
+              <div class="lightbox-thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
+                <img src="${img}" alt="صورة ${i + 1}">
+              </div>
+            `).join("")}
+          </div>
+        ` : ""}
+
         ${title ? `
         <div class="lightbox-info">
           <h3>${escapeHtml(title)}</h3>
@@ -604,6 +674,43 @@
     document.body.style.overflow = "hidden";
     setTimeout(() => lb.classList.add("active"), 10);
 
+    const mainImg = lb.querySelector(".lightbox-main-img");
+    const counter = lb.querySelector(".lightbox-counter");
+    const prevBtn = lb.querySelector(".lightbox-prev");
+    const nextBtn = lb.querySelector(".lightbox-next");
+    const thumbs = lb.querySelectorAll(".lightbox-thumb");
+
+    function showImage(index) {
+      currentIndex = (index + images.length) % images.length;
+      mainImg.src = images[currentIndex];
+      if (counter) counter.textContent = `${currentIndex + 1} / ${images.length}`;
+      thumbs.forEach((t, i) => {
+        t.classList.toggle("active", i === currentIndex);
+      });
+    }
+
+    // أزرار التنقل (تظهر فقط إذا كان هناك أكثر من صورة)
+    if (images.length > 1) {
+      prevBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showImage(currentIndex - 1);
+      });
+      nextBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showImage(currentIndex + 1);
+      });
+
+      thumbs.forEach(thumb => {
+        thumb.addEventListener("click", (e) => {
+          e.stopPropagation();
+          showImage(parseInt(thumb.dataset.index));
+        });
+      });
+    } else {
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
+    }
+
     function close() {
       lb.classList.remove("active");
       document.body.style.overflow = "";
@@ -613,10 +720,15 @@
     lb.querySelector(".lightbox-close").addEventListener("click", close);
     lb.querySelector(".lightbox-bg").addEventListener("click", close);
 
-    document.addEventListener("keydown", function esc(e) {
+    // لوحة المفاتيح
+    document.addEventListener("keydown", function keyHandler(e) {
       if (e.key === "Escape") {
         close();
-        document.removeEventListener("keydown", esc);
+        document.removeEventListener("keydown", keyHandler);
+      } else if (e.key === "ArrowLeft" && images.length > 1) {
+        showImage(currentIndex + 1); // RTL — السهم الأيسر = التالي
+      } else if (e.key === "ArrowRight" && images.length > 1) {
+        showImage(currentIndex - 1);
       }
     });
   }
@@ -639,7 +751,7 @@
     renderAdminProjects();
   }
 
-  // ═══════════════════ Confirm Dialog (مخصص بدل confirm) ═══════════════════
+  // ═══════════════════ Confirm Dialog ═══════════════════
   function showConfirm(message) {
     return new Promise((resolve) => {
       const modal = document.createElement("div");
@@ -667,12 +779,10 @@
       modal.querySelector("#confirmYes").addEventListener("click", () => close(true));
       modal.querySelector("#confirmNo").addEventListener("click", () => close(false));
 
-      // إغلاق عند النقر خارج النافذة
       modal.addEventListener("click", (e) => {
         if (e.target === modal) close(false);
       });
 
-      // إغلاق عند الضغط على Esc
       const escHandler = (e) => {
         if (e.key === "Escape") {
           close(false);
@@ -689,7 +799,6 @@
     if (!list) return;
     list.innerHTML = "<p>⏳ جاري التحميل...</p>";
 
-    // تحقق من التوكن
     const token = getToken();
     if (!token) {
       list.innerHTML = `
@@ -709,10 +818,16 @@
     }
 
     projects.forEach((p, i) => {
+      const images = getProjectImages(p);
+      const imagesCount = images.length;
+
       const item = document.createElement("div");
       item.className = "admin-item";
       item.innerHTML = `
-        <span>${escapeHtml(p.title)}</span>
+        <div class="admin-item-info">
+          <span>${escapeHtml(p.title)}</span>
+          ${imagesCount > 1 ? `<small class="admin-item-badge">📸 ${imagesCount} صور</small>` : ""}
+        </div>
         <button type="button" data-index="${i}" class="delete-btn">🗑️ حذف</button>
       `;
 
@@ -721,10 +836,9 @@
         e.preventDefault();
         e.stopPropagation();
 
-        const confirmed = await showConfirm(`هل تريد حذف "${p.title}"؟`);
+        const confirmed = await showConfirm(`هل تريد حذف "${p.title}"؟${imagesCount > 1 ? ` (يحتوي على ${imagesCount} صور)` : ""}`);
         if (!confirmed) return;
 
-        // تعطيل الزر
         btn.textContent = "⏳ جاري الحذف...";
         btn.disabled = true;
         btn.style.opacity = "0.6";
@@ -732,41 +846,32 @@
         try {
           console.log("🗑️ بدء حذف:", p.title);
 
-          // جلب المشاريع من GitHub مباشرةً (نسخة محدثة)
           const arr = await loadProjectsData();
           console.log("📥 المشاريع قبل:", arr.length);
 
-          // البحث عن المشروع بالعنوان والصورة (أدق)
-          const index = arr.findIndex(item =>
-            item.title === p.title && item.image === p.image
-          );
+          const index = arr.findIndex(item => item.title === p.title);
 
           if (index === -1) {
-            console.warn("⚠️ المشروع غير موجود");
             alert("المشروع غير موجود — سيتم تحديث القائمة");
             await renderAdminProjects();
             return;
           }
 
-          // حذف المشروع
           arr.splice(index, 1);
           console.log("✅ المشاريع بعد:", arr.length);
 
-          // حفظ في GitHub
           await saveProjectsData(arr);
-          console.log("💾 تم الحفظ في GitHub");
+          console.log("💾 تم الحفظ");
 
           alert(`✅ تم حذف "${p.title}" بنجاح`);
 
-          // إعادة تحميل
           await loadProjects();
           await renderAdminProjects();
 
         } catch (err) {
-          console.error("❌ خطأ في الحذف:", err);
+          console.error("❌ خطأ:", err);
           alert("❌ فشل الحذف: " + (err.message || "خطأ غير معروف"));
 
-          // استرجاع الزر
           btn.textContent = "🗑️ حذف";
           btn.disabled = false;
           btn.style.opacity = "1";
@@ -800,7 +905,7 @@
       const token = tokenInput.value.trim();
       if (!token) return alert("أدخل التوكن أولاً");
       if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) {
-        return alert("التوكن غير صالح — يجب أن يبدأ بـ ghp_ أو github_pat_");
+        return alert("التوكن غير صالح");
       }
 
       saveBtn.textContent = "⏳ جاري التحقق...";
@@ -810,13 +915,11 @@
         const res = await fetch("https://api.github.com/user", {
           headers: { "Authorization": `token ${token}` }
         });
-        if (!res.ok) throw new Error("التوكن غير صحيح أو منتهي الصلاحية");
+        if (!res.ok) throw new Error("التوكن غير صحيح");
 
         const user = await res.json();
-        console.log("✅ تم التحقق من التوكن — المستخدم:", user.login);
-
         setToken(token);
-        alert(`✅ تم حفظ التوكن بنجاح\nمرحباً ${user.login}`);
+        alert(`✅ تم حفظ التوكن — مرحباً ${user.login}`);
         updateStatus();
       } catch (e) {
         alert("❌ " + e.message);
@@ -870,6 +973,22 @@
       document.getElementById("adminPanel").classList.add("hidden");
     });
 
+    // عرض عدد الصور المختارة
+    const projImageInput = document.getElementById("projImage");
+    const projImageCount = document.getElementById("projImageCount");
+    if (projImageInput && projImageCount) {
+      projImageInput.addEventListener("change", () => {
+        const count = projImageInput.files.length;
+        if (count === 0) {
+          projImageCount.textContent = "";
+        } else if (count === 1) {
+          projImageCount.textContent = "📸 تم اختيار صورة واحدة";
+        } else {
+          projImageCount.textContent = `📸 تم اختيار ${count} صور — ستظهر جميعها في مشروع واحد`;
+        }
+      });
+    }
+
     // Save Logo
     const saveLogoBtn = document.getElementById("saveLogo");
     if (saveLogoBtn) {
@@ -905,7 +1024,7 @@
       });
     }
 
-    // Add Project
+    // Add Project — رفع عدة صور كمشروع واحد
     const addBtn = document.getElementById("addProject");
     if (addBtn) {
       addBtn.addEventListener("click", async () => {
@@ -913,32 +1032,52 @@
         const description = document.getElementById("projDesc").value.trim();
         const files = document.getElementById("projImage").files;
 
-        if (!title || files.length === 0) return alert("أدخل الاسم والصورة");
+        if (!title) return alert("أدخل اسم المشروع");
+        if (files.length === 0) return alert("اختر صورة واحدة على الأقل");
 
-        addBtn.textContent = "⏳ جاري الرفع...";
+        addBtn.textContent = `⏳ جاري رفع ${files.length} صورة...`;
         addBtn.disabled = true;
 
         try {
           const projects = await loadProjectsData();
 
-          for (const file of files) {
+          // ═══ رفع كل الصور وجمع روابطها ═══
+          const imageUrls = [];
+          const totalFiles = files.length;
+
+          for (let i = 0; i < totalFiles; i++) {
+            const file = files[i];
+
+            addBtn.textContent = `⏳ جاري رفع الصورة ${i + 1} من ${totalFiles}...`;
+
             const base64 = await fileToBase64(file);
             const ext = file.name.split(".").pop();
-            const filename = `project_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+            const filename = `project_${Date.now()}_${i}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
             const path = `${IMAGES_FOLDER}/${filename}`;
 
-            await uploadToGitHub(path, base64, `رفع مشروع: ${title}`);
+            await uploadToGitHub(path, base64, `رفع صورة ${i + 1} لمشروع: ${title}`);
             const url = getImageUrl(path);
-
-            projects.push({ title, description, image: url, createdAt: Date.now() });
+            imageUrls.push(url);
           }
+
+          // ═══ حفظ المشروع ككائن واحد يحتوي كل الصور ═══
+          projects.push({
+            title,
+            description,
+            images: imageUrls,          // ← مصفوفة الصور
+            image: imageUrls[0],         // ← أول صورة (للدعم القديم)
+            imagesCount: imageUrls.length,
+            createdAt: Date.now()
+          });
 
           await saveProjectsData(projects);
 
-          alert("✅ تم إضافة المشروع");
+          alert(`✅ تم إضافة المشروع بنجاح مع ${imageUrls.length} ${imageUrls.length === 1 ? 'صورة' : 'صور'}`);
+
           document.getElementById("projTitle").value = "";
           document.getElementById("projDesc").value = "";
           document.getElementById("projImage").value = "";
+          document.getElementById("projImageCount").textContent = "";
 
           await loadProjects();
           await renderAdminProjects();
