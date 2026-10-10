@@ -386,6 +386,15 @@
     return await res.json();
   }
 
+  // جلب اسم الملف sha من GitHub (مهم للحذف)
+  async function getFileSha(path) {
+    const url = `${API_BASE}/${path}?t=${Date.now()}`;
+    const res = await fetch(url, { headers: apiHeaders() });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.sha;
+  }
+
   async function readPublicFile(path) {
     const urls = [
       `https://elaqsaoffice-dot.github.io/alaqsa-website/${path}?t=${Date.now()}`,
@@ -495,12 +504,22 @@
   // ═══════════════════ Projects Data ═══════════════════
   async function loadProjectsData() {
     try {
+      // جرّب مع التوكن أولاً (للأدمن — يضمن أحدث نسخة)
+      const token = getToken();
+      if (token) {
+        try {
+          const content = await readFromGitHub(DATA_FILE);
+          if (content) return JSON.parse(content);
+        } catch (e) {
+          console.warn("فشل القراءة مع التوكن — جرب بدون توكن");
+        }
+      }
+
+      // بدون توكن
       const publicContent = await readPublicFile(DATA_FILE);
       if (publicContent) return JSON.parse(publicContent);
 
-      const content = await readFromGitHub(DATA_FILE);
-      if (!content) return [];
-      return JSON.parse(content);
+      return [];
     } catch (e) {
       return [];
     }
@@ -620,10 +639,66 @@
     renderAdminProjects();
   }
 
+  // ═══════════════════ Confirm Dialog (مخصص بدل confirm) ═══════════════════
+  function showConfirm(message) {
+    return new Promise((resolve) => {
+      const modal = document.createElement("div");
+      modal.className = "modal";
+      modal.style.zIndex = "4000";
+      modal.innerHTML = `
+        <div class="modal-content" style="max-width:420px; text-align:center;">
+          <div style="font-size:3rem; margin-bottom:14px;">⚠️</div>
+          <h3 style="margin-bottom:18px; color:#DC2626;">تأكيد الحذف</h3>
+          <p style="margin-bottom:24px; color:#64748B; line-height:1.7; font-size:1rem;">${message}</p>
+          <div class="modal-buttons" style="display:flex; gap:10px;">
+            <button id="confirmYes" class="btn-modal primary" style="background:#DC2626; flex:1;">نعم، احذف</button>
+            <button id="confirmNo" class="btn-modal secondary" style="flex:1;">إلغاء</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      function close(result) {
+        modal.remove();
+        resolve(result);
+      }
+
+      modal.querySelector("#confirmYes").addEventListener("click", () => close(true));
+      modal.querySelector("#confirmNo").addEventListener("click", () => close(false));
+
+      // إغلاق عند النقر خارج النافذة
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) close(false);
+      });
+
+      // إغلاق عند الضغط على Esc
+      const escHandler = (e) => {
+        if (e.key === "Escape") {
+          close(false);
+          document.removeEventListener("keydown", escHandler);
+        }
+      };
+      document.addEventListener("keydown", escHandler);
+    });
+  }
+
+  // ═══════════════════ Admin Projects List ═══════════════════
   async function renderAdminProjects() {
     const list = document.getElementById("adminProjectsList");
     if (!list) return;
     list.innerHTML = "<p>⏳ جاري التحميل...</p>";
+
+    // تحقق من التوكن
+    const token = getToken();
+    if (!token) {
+      list.innerHTML = `
+        <p class="admin-empty" style="color:#DC2626; padding:20px; text-align:center;">
+          ⚠️ لم يتم إعداد التوكن — لا يمكن التعديل أو الحذف<br>
+          <small style="font-size:0.85rem;">الصق التوكن في الأعلى واضغط "حفظ التوكن"</small>
+        </p>`;
+      return;
+    }
 
     const projects = await loadProjectsData();
     list.innerHTML = "";
@@ -636,16 +711,68 @@
     projects.forEach((p, i) => {
       const item = document.createElement("div");
       item.className = "admin-item";
-      item.innerHTML = `<span>${escapeHtml(p.title)}</span><button data-index="${i}">حذف</button>`;
-      item.querySelector("button").addEventListener("click", async () => {
-        if (confirm("تأكيد حذف المشروع؟")) {
+      item.innerHTML = `
+        <span>${escapeHtml(p.title)}</span>
+        <button type="button" data-index="${i}" class="delete-btn">🗑️ حذف</button>
+      `;
+
+      const btn = item.querySelector("button");
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const confirmed = await showConfirm(`هل تريد حذف "${p.title}"؟`);
+        if (!confirmed) return;
+
+        // تعطيل الزر
+        btn.textContent = "⏳ جاري الحذف...";
+        btn.disabled = true;
+        btn.style.opacity = "0.6";
+
+        try {
+          console.log("🗑️ بدء حذف:", p.title);
+
+          // جلب المشاريع من GitHub مباشرةً (نسخة محدثة)
           const arr = await loadProjectsData();
-          arr.splice(i, 1);
+          console.log("📥 المشاريع قبل:", arr.length);
+
+          // البحث عن المشروع بالعنوان والصورة (أدق)
+          const index = arr.findIndex(item =>
+            item.title === p.title && item.image === p.image
+          );
+
+          if (index === -1) {
+            console.warn("⚠️ المشروع غير موجود");
+            alert("المشروع غير موجود — سيتم تحديث القائمة");
+            await renderAdminProjects();
+            return;
+          }
+
+          // حذف المشروع
+          arr.splice(index, 1);
+          console.log("✅ المشاريع بعد:", arr.length);
+
+          // حفظ في GitHub
           await saveProjectsData(arr);
+          console.log("💾 تم الحفظ في GitHub");
+
+          alert(`✅ تم حذف "${p.title}" بنجاح`);
+
+          // إعادة تحميل
           await loadProjects();
           await renderAdminProjects();
+
+        } catch (err) {
+          console.error("❌ خطأ في الحذف:", err);
+          alert("❌ فشل الحذف: " + (err.message || "خطأ غير معروف"));
+
+          // استرجاع الزر
+          btn.textContent = "🗑️ حذف";
+          btn.disabled = false;
+          btn.style.opacity = "1";
         }
       });
+
       list.appendChild(item);
     });
   }
@@ -660,11 +787,11 @@
     function updateStatus() {
       const token = getToken();
       if (token) {
-        status.textContent = "✅ التوكن محفوظ";
+        status.textContent = "✅ التوكن محفوظ في هذا المتصفح";
         status.style.color = "#16A34A";
         tokenInput.value = token;
       } else {
-        status.textContent = "⚠️ لم يتم إعداد التوكن";
+        status.textContent = "⚠️ لم يتم إعداد التوكن بعد";
         status.style.color = "#DC2626";
       }
     }
@@ -673,7 +800,7 @@
       const token = tokenInput.value.trim();
       if (!token) return alert("أدخل التوكن أولاً");
       if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) {
-        return alert("التوكن غير صالح");
+        return alert("التوكن غير صالح — يجب أن يبدأ بـ ghp_ أو github_pat_");
       }
 
       saveBtn.textContent = "⏳ جاري التحقق...";
@@ -683,10 +810,13 @@
         const res = await fetch("https://api.github.com/user", {
           headers: { "Authorization": `token ${token}` }
         });
-        if (!res.ok) throw new Error("التوكن غير صحيح");
+        if (!res.ok) throw new Error("التوكن غير صحيح أو منتهي الصلاحية");
+
+        const user = await res.json();
+        console.log("✅ تم التحقق من التوكن — المستخدم:", user.login);
 
         setToken(token);
-        alert("✅ تم حفظ التوكن");
+        alert(`✅ تم حفظ التوكن بنجاح\nمرحباً ${user.login}`);
         updateStatus();
       } catch (e) {
         alert("❌ " + e.message);
@@ -740,6 +870,7 @@
       document.getElementById("adminPanel").classList.add("hidden");
     });
 
+    // Save Logo
     const saveLogoBtn = document.getElementById("saveLogo");
     if (saveLogoBtn) {
       saveLogoBtn.addEventListener("click", async () => {
@@ -774,6 +905,7 @@
       });
     }
 
+    // Add Project
     const addBtn = document.getElementById("addProject");
     if (addBtn) {
       addBtn.addEventListener("click", async () => {
@@ -851,6 +983,7 @@
     }
   });
 
+  // ═══════════════════ Secret Trigger ═══════════════════
   function bindSecretTrigger() {
     const trigger = document.getElementById("secretTrigger");
     if (!trigger) return;
@@ -875,6 +1008,7 @@
     });
   }
 
+  // ═══════════════════ Count Up ═══════════════════
   function initCountUp() {
     const counters = document.querySelectorAll("[data-count]");
     if (!counters.length) return;
@@ -904,6 +1038,7 @@
     counters.forEach(el => observer.observe(el));
   }
 
+  // ═══════════════════ Scroll Progress ═══════════════════
   function initScrollProgress() {
     const bar = document.getElementById("scrollProgress");
     const backBtn = document.getElementById("backToTop");
@@ -924,6 +1059,7 @@
     });
   }
 
+  // ═══════════════════ Preloader ═══════════════════
   function initPreloader() {
     const preloader = document.getElementById("preloader");
     if (!preloader) return;
@@ -943,6 +1079,7 @@
     }
   }
 
+  // ═══════════════════ Mobile Menu ═══════════════════
   function initMobileMenu() {
     const toggle = document.getElementById("menuToggle");
     const nav = document.getElementById("mainNav");
@@ -968,6 +1105,7 @@
     });
   }
 
+  // ═══════════════════ Header Scroll ═══════════════════
   function initHeaderScroll() {
     const header = document.getElementById("header");
     if (!header) return;
@@ -985,6 +1123,7 @@
     }, { passive: true });
   }
 
+  // ═══════════════════ Active Nav ═══════════════════
   function initActiveNav() {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -1003,6 +1142,7 @@
     }, { passive: true });
   }
 
+  // ═══════════════════ Init ═══════════════════
   function init() {
     bindButtons();
     bindTokenUI();
