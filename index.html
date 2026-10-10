@@ -407,15 +407,22 @@
     await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
   }
 
- async function loadLogo() {
+async function loadLogo() {
   const img = document.getElementById("siteLogo");
   const logoText = document.querySelector(".logo-text");
-
   if (!img) return;
 
-  // إظهار النص افتراضياً (في حال فشل الشعار)
-  if (logoText) logoText.style.display = "block";
+  // 1) تحقق أولاً من localStorage (سريع + بدون إنترنت)
+  const cachedLogo = localStorage.getItem("alaqsa_logo_data");
+  if (cachedLogo) {
+    img.src = cachedLogo;
+    img.style.display = "block";
+    if (logoText) logoText.style.display = "none";
+    console.log("✅ الشعار من التخزين المحلي");
+    return;
+  }
 
+  // 2) إذا لا يوجد، حاول التحميل من GitHub
   try {
     const content = await readFromGitHub("logo.json");
     if (!content) return;
@@ -423,38 +430,35 @@
     const data = JSON.parse(content);
     if (!data.url) return;
 
-    // إنشاء صورة جديدة للتحقق من التحميل
-    const testImg = new Image();
-
-    testImg.onload = () => {
-      // نجح التحميل — عرض الصورة
-      img.src = data.url;
+    img.onload = () => {
       img.style.display = "block";
-      // إخفاء النص إذا نجح الشعار
       if (logoText) logoText.style.display = "none";
-      console.log("✅ تم تحميل الشعار بنجاح");
+      console.log("✅ تم تحميل الشعار");
+
+      // حفظ نسخة Base64 في المتصفح للزيارات القادمة
+      try {
+        fetch(data.url)
+          .then(r => r.blob())
+          .then(blob => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              localStorage.setItem("alaqsa_logo_data", reader.result);
+            };
+            reader.readAsDataURL(blob);
+          });
+      } catch (e) {}
     };
 
-    testImg.onerror = () => {
-      // فشل التحميل — إبقاء النص فقط
-      console.warn("⚠️ فشل تحميل الشعار — عرض النص فقط");
-      if (img) img.style.display = "none";
+    img.onerror = () => {
+      console.warn("⚠️ فشل تحميل الشعار — عرض النص");
+      img.style.display = "none";
       if (logoText) logoText.style.display = "block";
     };
 
-    // بدء التحميل
-    testImg.src = data.url;
-
-    // Timeout بعد 5 ثوانٍ
-    setTimeout(() => {
-      if (testImg.complete && testImg.naturalHeight !== 0) {
-        // نجح التحميل
-      }
-    }, 5000);
-
+    img.src = data.url;
   } catch (e) {
-    console.warn("خطأ في تحميل الشعار:", e);
-    if (img) img.style.display = "none";
+    console.warn("خطأ:", e);
+    img.style.display = "none";
     if (logoText) logoText.style.display = "block";
   }
 }
