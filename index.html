@@ -124,7 +124,7 @@
     <p class="copyright">© 2025 الأقصى للمقاولات العامة – جميع الحقوق محفوظة</p>
   </div>
 
-  <!-- 🕵️ الزر المخفي (الزاوية السفلية اليمنى) -->
+  <!-- 🕵️ الزر المخفي -->
   <div id="secretTrigger" class="secret-trigger" title=""></div>
 </footer>
 
@@ -145,17 +145,19 @@
 <div id="adminPanel" class="modal hidden">
   <div class="modal-content admin-content">
     <h3>🛠 لوحة تحكم المسؤول</h3>
-<!-- 🔑 قسم التوكن - يظهر مرة واحدة فقط -->
-<div class="admin-section" id="tokenSection" style="background:#FFF8E1; border:2px solid #FFC107;">
-  <h4>🔑 إعداد الاتصال بـ GitHub</h4>
-  <p style="font-size:.85rem; color:#666; margin-bottom:12px;">
-    الصق التوكن مرة واحدة، وسيُحفظ في هذا المتصفح فقط (لا يُرفع أبداً على GitHub).
-  </p>
-  <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-  <button id="saveToken" class="btn-primary">💾 حفظ التوكن</button>
-  <p id="tokenStatus" style="font-size:.85rem; margin-top:10px;"></p>
-  <hr style="margin-top:15px;">
-</div>
+
+    <!-- 🔑 قسم التوكن -->
+    <div class="admin-section" id="tokenSection" style="background:#FFF8E1; border:2px solid #FFC107;">
+      <h4>🔑 إعداد الاتصال بـ GitHub</h4>
+      <p style="font-size:.85rem; color:#666; margin-bottom:12px;">
+        الصق التوكن مرة واحدة، وسيُحفظ في هذا المتصفح فقط (لا يُرفع على GitHub).
+      </p>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      <button id="saveToken" class="btn-primary">💾 حفظ التوكن</button>
+      <p id="tokenStatus" style="font-size:.85rem; margin-top:10px;"></p>
+      <hr style="margin-top:15px;">
+    </div>
+
     <div class="admin-section">
       <h4>شعار الشركة</h4>
       <input type="file" id="logoUpload" accept="image/*">
@@ -187,28 +189,20 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- كود GitHub الكامل - يعمل مع الاستضافة ورفع الصور              -->
+<!-- كود الموقع الكامل - GitHub Mode (نسخة نظيفة بدون أخطاء)      -->
 <!-- ============================================================ -->
 <script>
 (function() {
   'use strict';
 
   // ════════════════════════════════════════════════════════════
-  // ⚙️ الإعدادات - استبدل هذه القيم بقيمك على GitHub
+  // ⚙️ الإعدادات
   // ════════════════════════════════════════════════════════════
-  const GITHUB_USERNAME = "elaqsaoffice-dot";         // ← اسمك على GitHub
-  const GITHUB_REPO = "alaqsa-website";            // ← اسم المستودع
-  const GITHUB_BRANCH = "main";                    // ← الفرع الرئيسي
- // 🔑 التوكن يُقرأ من localStorage (لا يُرفع على GitHub)
-function getToken() {
-  return localStorage.getItem("alaqsa_github_token") || "";
-}
-
-function setToken(token) {
-  localStorage.setItem("alaqsa_github_token", token);
-}       // ← التوكن (سننشئه لاحقاً)
-  const IMAGES_FOLDER = "images";                  // ← مجلد الصور
-  const DATA_FILE = "projects.json";               // ← ملف بيانات المشاريع
+  const GITHUB_USERNAME = "elaqsaoffice-dot";
+  const GITHUB_REPO = "alaqsa-website";
+  const GITHUB_BRANCH = "main";
+  const IMAGES_FOLDER = "images";
+  const DATA_FILE = "projects.json";
 
   // ════════════════════════════════════════════════════════════
   // 🔐 الإعدادات الأمنية
@@ -217,27 +211,32 @@ function setToken(token) {
   const ADMIN_PASSWORD = "AH219##";
 
   // ════════════════════════════════════════════════════════════
+  // 🔑 إدارة التوكن (localStorage)
+  // ════════════════════════════════════════════════════════════
+  function getToken() {
+    return localStorage.getItem("alaqsa_github_token") || "";
+  }
+
+  function setToken(token) {
+    localStorage.setItem("alaqsa_github_token", token);
+  }
+
+  // ════════════════════════════════════════════════════════════
   // 📂 مساعدات GitHub API
   // ════════════════════════════════════════════════════════════
   const API_BASE = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents`;
 
- function apiHeaders() {
-  const token = getToken();
-  if (!token) {
-    throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن وأدخل التوكن أولاً.");
-  }
-  return {
-    "Authorization": `token ${token}`,
-    "Accept": "application/vnd.github.v3+json"
-  };
-}
+  function apiHeaders() {
+    const token = getToken();
+    if (!token) {
+      throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن وأدخل التوكن أولاً.");
+    }
     return {
-      "Authorization": `token ${GITHUB_TOKEN}`,
+      "Authorization": `token ${token}`,
       "Accept": "application/vnd.github.v3+json"
     };
   }
 
-  // تحويل ملف إلى Base64 (مع إزالة الرأس)
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -250,7 +249,6 @@ function setToken(token) {
     });
   }
 
-  // رفع ملف إلى GitHub (أو تحديثه إذا كان موجوداً)
   async function uploadToGitHub(path, contentBase64, message) {
     const url = `${API_BASE}/${path}`;
     const body = {
@@ -259,14 +257,13 @@ function setToken(token) {
       branch: GITHUB_BRANCH
     };
 
-    // إذا كان الملف موجوداً، نحتاج sha للتحديث
     try {
       const existing = await fetch(url, { headers: apiHeaders() });
       if (existing.ok) {
         const data = await existing.json();
         body.sha = data.sha;
       }
-    } catch (e) { /* الملف غير موجود، لا مشكلة */ }
+    } catch (e) { /* الملف غير موجود */ }
 
     const res = await fetch(url, {
       method: "PUT",
@@ -281,24 +278,21 @@ function setToken(token) {
     return await res.json();
   }
 
-  // قراءة ملف من GitHub
   async function readFromGitHub(path) {
     const url = `${API_BASE}/${path}?t=${Date.now()}`;
     const res = await fetch(url, { headers: apiHeaders() });
     if (!res.ok) return null;
     const data = await res.json();
-    // فك تشفير Base64 (يدعم العربية)
     const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
     return content;
   }
 
-  // رابط الصورة المباشر
   function getImageUrl(path) {
     return `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
   }
 
   // ════════════════════════════════════════════════════════════
-  // 📦 إدارة المشاريع (JSON على GitHub)
+  // 📦 إدارة المشاريع
   // ════════════════════════════════════════════════════════════
   async function loadProjectsData() {
     try {
@@ -336,7 +330,7 @@ function setToken(token) {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 📋 عرض المشاريع على الموقع
+  // 📋 عرض المشاريع
   // ════════════════════════════════════════════════════════════
   async function loadProjects() {
     const grid = document.getElementById("projectsGrid");
@@ -378,9 +372,6 @@ function setToken(token) {
       .replace(/"/g, "&quot;");
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🔍 Lightbox لعرض الصور
-  // ════════════════════════════════════════════════════════════
   function openLightbox(src) {
     const lb = document.createElement("div");
     lb.className = "lightbox";
@@ -409,9 +400,6 @@ function setToken(token) {
     renderAdminProjects();
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 📋 عرض المشاريع في لوحة الأدمن
-  // ════════════════════════════════════════════════════════════
   async function renderAdminProjects() {
     const list = document.getElementById("adminProjectsList");
     if (!list) return;
@@ -443,10 +431,61 @@ function setToken(token) {
   }
 
   // ════════════════════════════════════════════════════════════
+  // 🔑 ربط أزرار التوكن
+  // ════════════════════════════════════════════════════════════
+  function bindTokenUI() {
+    const tokenInput = document.getElementById("tokenInput");
+    const saveBtn = document.getElementById("saveToken");
+    const status = document.getElementById("tokenStatus");
+
+    if (!saveBtn) return;
+
+    function updateStatus() {
+      const token = getToken();
+      if (token) {
+        status.textContent = "✅ التوكن محفوظ في هذا المتصفح";
+        status.style.color = "#2e7d32";
+        tokenInput.value = token;
+      } else {
+        status.textContent = "⚠️ لم يتم إعداد التوكن بعد — رفع الصور لن يعمل";
+        status.style.color = "#d33";
+      }
+    }
+
+    saveBtn.addEventListener("click", async () => {
+      const token = tokenInput.value.trim();
+      if (!token) return alert("أدخل التوكن أولاً");
+      if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) {
+        return alert("التوكن غير صالح (يجب أن يبدأ بـ ghp_ أو github_pat_)");
+      }
+
+      saveBtn.textContent = "⏳ جاري التحقق...";
+      saveBtn.disabled = true;
+
+      try {
+        const res = await fetch("https://api.github.com/user", {
+          headers: { "Authorization": `token ${token}` }
+        });
+        if (!res.ok) throw new Error("التوكن غير صحيح أو منتهي");
+
+        setToken(token);
+        alert("✅ تم حفظ التوكن بنجاح");
+        updateStatus();
+      } catch (e) {
+        alert("❌ " + e.message);
+      } finally {
+        saveBtn.textContent = "💾 حفظ التوكن";
+        saveBtn.disabled = false;
+      }
+    });
+
+    updateStatus();
+  }
+
+  // ════════════════════════════════════════════════════════════
   // 🎬 ربط الأزرار
   // ════════════════════════════════════════════════════════════
   function bindButtons() {
-    // زر الدخول
     const loginBtn = document.getElementById("loginBtn");
     const pwd = document.getElementById("adminPassword");
     const err = document.getElementById("loginError");
@@ -589,7 +628,6 @@ function setToken(token) {
     const tag = document.activeElement?.tagName.toLowerCase() || "";
     if (tag === "input" || tag === "textarea") return;
 
-    // * للتصفير
     if (e.key === "*" || e.key === "ذ" || e.key === "×") {
       typedBuffer = "";
       clearTimeout(typedTimer);
@@ -645,61 +683,9 @@ function setToken(token) {
   // ════════════════════════════════════════════════════════════
   // 🚀 بدء التشغيل
   // ════════════════════════════════════════════════════════════
- // 🔑 ربط أزرار التوكن
-function bindTokenUI() {
-  const tokenSection = document.getElementById("tokenSection");
-  const tokenInput = document.getElementById("tokenInput");
-  const saveBtn = document.getElementById("saveToken");
-  const status = document.getElementById("tokenStatus");
-
-  if (!tokenSection) return;
-
-  // عرض حالة التوكن
-  function updateStatus() {
-    const token = getToken();
-    if (token) {
-      status.textContent = "✅ التوكن محفوظ في هذا المتصفح";
-      status.style.color = "#2e7d32";
-      tokenInput.value = token;
-    } else {
-      status.textContent = "⚠️ لم يتم إعداد التوكن بعد — ارفع صورة لن تعمل";
-      status.style.color = "#d33";
-    }
-  }
-
-  saveBtn.addEventListener("click", async () => {
-    const token = tokenInput.value.trim();
-    if (!token) return alert("أدخل التوكن أولاً");
-    if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) {
-      return alert("التوكن غير صالح (يجب أن يبدأ بـ ghp_ أو github_pat_)");
-    }
-
-    saveBtn.textContent = "⏳ جاري التحقق...";
-    saveBtn.disabled = true;
-
-    try {
-      // التحقق من التوكن عبر GitHub API
-      const res = await fetch("https://api.github.com/user", {
-        headers: { "Authorization": `token ${token}` }
-      });
-      if (!res.ok) throw new Error("التوكن غير صحيح أو منتهي");
-
-      setToken(token);
-      alert("✅ تم حفظ التوكن بنجاح");
-      updateStatus();
-    } catch (e) {
-      alert("❌ " + e.message);
-    } finally {
-      saveBtn.textContent = "💾 حفظ التوكن";
-      saveBtn.disabled = false;
-    }
-  });
-
-  updateStatus();
-}
- function init() {
-  bindButtons();
-  bindTokenUI();   // ← أضف هذا السطر
+  function init() {
+    bindButtons();
+    bindTokenUI();
     bindSecretTrigger();
     loadLogo();
     loadProjects();
