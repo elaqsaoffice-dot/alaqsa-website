@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   شركة الأقصى للمقاولات العامة — Fully Responsive
+   شركة الأقصى للمقاولات العامة — Fully Responsive (Fixed)
    ══════════════════════════════════════════════════════════════ */
 
 * {
@@ -54,7 +54,6 @@ img {
   display: block;
 }
 
-/* منع overflow الأفقي على الموبايل */
 * {
   max-width: 100%;
 }
@@ -120,7 +119,7 @@ img {
   font-weight: 700;
 }
 
-/* ═══════════════════ HEADER ═══════════════════ */
+/* ═══════════════════ HEADER (Desktop) ═══════════════════ */
 #header {
   position: fixed;
   top: 0;
@@ -154,12 +153,14 @@ img {
   padding: 10px 0;
 }
 
+/* Logo Area — مرن ومنضبط */
 .logo-area {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1;
   min-width: 0;
-  flex-shrink: 1;
+  overflow: hidden;
 }
 
 .logo-img {
@@ -170,10 +171,7 @@ img {
   transition: height 0.3s var(--ease);
   flex-shrink: 0;
   display: block;
-  /* تحسينات للهاتف */
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  will-change: height;
 }
 
 #header.scrolled .logo-img {
@@ -181,6 +179,7 @@ img {
 }
 
 .logo-text {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
 }
@@ -199,10 +198,12 @@ img {
   font-size: 1.15rem;
 }
 
+/* Desktop Nav */
 .main-nav {
   display: flex;
   gap: 4px;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .nav-link {
@@ -1165,11 +1166,10 @@ footer {
   border: 1.5px solid var(--gray-200);
   border-radius: 10px;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 16px;
   transition: all 0.2s var(--ease);
   background: var(--gray-50);
   color: var(--gray-900);
-  font-size: 16px;
 }
 
 .modal-content input:focus,
@@ -1347,7 +1347,7 @@ footer {
    ══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .container {
-    padding: 0 18px;
+    padding: 0 16px;
   }
 
   .section {
@@ -1355,42 +1355,88 @@ footer {
   }
 
   .hero {
-    padding: 120px 18px 80px;
+    padding: 110px 18px 70px;
     min-height: 100svh;
   }
 
-  /* Header */
+  /* ═══════ HEADER — MOBILE (مهم جداً) ═══════ */
   .header-inner {
-    min-height: 80px;
-    padding: 10px 0;
+    min-height: 64px;
+    padding: 8px 0;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
   }
 
   #header.scrolled .header-inner {
-    min-height: 70px;
+    min-height: 58px;
+    padding: 6px 0;
   }
 
+  /* منطقة الشعار — مرنة */
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* الشعار — حجم مثالي */
   .logo-img {
-    height: 55px;
-    max-width: 110px;
+    height: 44px;
+    width: auto;
+    max-width: 60px;
+    flex-shrink: 0;
+    object-fit: contain;
   }
 
   #header.scrolled .logo-img {
-    height: 45px;
+    height: 38px;
+  }
+
+  /* النص — يبقى داخل الحدود */
+  .logo-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .logo-text h1 {
-    font-size: 1rem;
-  }
-
-  #header.scrolled .logo-text h1 {
-    font-size: 0.9rem;
-  }
-
-  .menu-toggle {
+    font-size: 0.85rem;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
     display: block;
   }
 
-  /* Mobile Nav */
+  #header.scrolled .logo-text h1 {
+    font-size: 0.8rem;
+  }
+
+  /* زر القائمة — دائماً ظاهر على الهاتف */
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 4px;
+    flex-shrink: 0;
+    margin-right: 0;
+  }
+
+  .menu-toggle span {
+    width: 22px;
+    height: 2.2px;
+    margin: 4px auto;
+  }
+
+  /* القائمة — منسدلة من اليمين */
   .main-nav {
     position: fixed;
     top: 0;
@@ -1421,7 +1467,7 @@ footer {
     padding: 14px;
   }
 
-  /* Hero */
+  /* ═══════ HERO ═══════ */
   .hero-title {
     font-size: 2rem;
   }
@@ -1454,7 +1500,7 @@ footer {
     max-width: 300px;
   }
 
-  /* Section header */
+  /* ═══════ SECTION HEADER ═══════ */
   .section-header {
     margin-bottom: 40px;
   }
@@ -1467,7 +1513,7 @@ footer {
     font-size: 0.95rem;
   }
 
-  /* About */
+  /* ═══════ ABOUT ═══════ */
   .about-text p {
     font-size: 1rem;
   }
@@ -1490,7 +1536,7 @@ footer {
     font-size: 0.85rem;
   }
 
-  /* Stats */
+  /* ═══════ STATS ═══════ */
   .stats-grid {
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -1512,7 +1558,7 @@ footer {
     font-size: 0.85rem;
   }
 
-  /* Services */
+  /* ═══════ SERVICES ═══════ */
   .services-grid {
     grid-template-columns: 1fr;
     gap: 14px;
@@ -1526,7 +1572,7 @@ footer {
     font-size: 2rem;
   }
 
-  /* Projects */
+  /* ═══════ PROJECTS ═══════ */
   .projects-grid {
     grid-template-columns: 1fr;
     gap: 18px;
@@ -1536,7 +1582,7 @@ footer {
     height: 220px;
   }
 
-  /* Contact */
+  /* ═══════ CONTACT ═══════ */
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 14px;
@@ -1557,7 +1603,7 @@ footer {
     max-width: 300px;
   }
 
-  /* Footer */
+  /* ═══════ FOOTER ═══════ */
   .footer-brand h3 {
     font-size: 1.15rem;
   }
@@ -1570,7 +1616,7 @@ footer {
     font-size: 0.85rem;
   }
 
-  /* Modals */
+  /* ═══════ MODALS ═══════ */
   .modal-content {
     padding: 24px 20px;
     border-radius: 16px;
@@ -1580,7 +1626,7 @@ footer {
     font-size: 1.15rem;
   }
 
-  /* Lightbox */
+  /* ═══════ LIGHTBOX ═══════ */
   .lightbox-inner {
     width: 100%;
     border-radius: 16px;
@@ -1604,7 +1650,7 @@ footer {
     font-size: 0.9rem;
   }
 
-  /* Back to Top */
+  /* ═══════ BACK TO TOP ═══════ */
   .back-to-top {
     bottom: 16px;
     left: 16px;
@@ -1619,7 +1665,7 @@ footer {
    ══════════════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
   .container {
-    padding: 0 16px;
+    padding: 0 14px;
   }
 
   .section {
@@ -1627,9 +1673,50 @@ footer {
   }
 
   .hero {
-    padding: 100px 16px 60px;
+    padding: 100px 14px 60px;
   }
 
+  /* Header أصغر */
+  .header-inner {
+    min-height: 58px;
+    padding: 6px 0;
+    gap: 6px;
+  }
+
+  #header.scrolled .header-inner {
+    min-height: 52px;
+    padding: 5px 0;
+  }
+
+  .logo-img {
+    height: 38px;
+    max-width: 50px;
+  }
+
+  #header.scrolled .logo-img {
+    height: 34px;
+  }
+
+  .logo-text h1 {
+    font-size: 0.78rem;
+  }
+
+  #header.scrolled .logo-text h1 {
+    font-size: 0.74rem;
+  }
+
+  .menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .menu-toggle span {
+    width: 20px;
+    height: 2px;
+    margin: 3.5px auto;
+  }
+
+  /* Hero */
   .hero-badge {
     font-size: 0.78rem;
     padding: 6px 14px;
@@ -1741,11 +1828,41 @@ footer {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   RESPONSIVE — هاتف صغير (360px - iPhone SE)
+   RESPONSIVE — هاتف صغير (375px - iPhone SE, Galaxy S8)
    ══════════════════════════════════════════════════════════════ */
-@media (max-width: 360px) {
-  .container {
-    padding: 0 14px;
+@media (max-width: 375px) {
+  .header-inner {
+    min-height: 54px;
+    padding: 5px 0;
+    gap: 4px;
+  }
+
+  .logo-img {
+    height: 34px;
+    max-width: 44px;
+  }
+
+  #header.scrolled .logo-img {
+    height: 30px;
+  }
+
+  .logo-text h1 {
+    font-size: 0.72rem;
+  }
+
+  #header.scrolled .logo-text h1 {
+    font-size: 0.68rem;
+  }
+
+  .menu-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .menu-toggle span {
+    width: 18px;
+    height: 1.8px;
+    margin: 3px auto;
   }
 
   .hero-title {
@@ -1756,31 +1873,39 @@ footer {
     font-size: 1.35rem;
   }
 
-  .stat-number {
-    font-size: 1.8rem;
-  }
-
   .btn {
     padding: 11px 22px;
     font-size: 0.88rem;
   }
+}
 
-  .hero-chip {
-    font-size: 0.78rem;
-    padding: 8px 12px;
-  }
-
-  .logo-text h1 {
-    font-size: 0.9rem;
-  }
-
-  #header.scrolled .logo-text h1 {
-    font-size: 0.85rem;
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — هاتف صغير جداً (320px)
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 320px) {
+  .container {
+    padding: 0 10px;
   }
 
   .logo-img {
-    height: 48px;
-    max-width: 90px;
+    height: 30px;
+    max-width: 40px;
+  }
+
+  .logo-text h1 {
+    font-size: 0.68rem;
+  }
+
+  .hero-title {
+    font-size: 1.35rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .stat-number {
+    font-size: 1.7rem;
   }
 }
 
@@ -1827,7 +1952,7 @@ footer {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   LANDSCAPE — هاتف في الوضع الأفقي
+   LANDSCAPE — هاتف أفقي
    ══════════════════════════════════════════════════════════════ */
 @media (max-height: 500px) and (orientation: landscape) {
   .hero {
