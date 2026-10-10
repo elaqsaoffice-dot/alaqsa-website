@@ -51,7 +51,7 @@
 <!-- Hero -->
 <section id="home" class="hero">
   <div class="hero-content">
-    <div class="hero-badge">🏗️ خبرة أكثر من 20 عاماً</div>
+    <div class="hero-badge" id="adminTrigger" title="">🏗️ خبرة أكثر من 20 عاماً</div>
 
     <h2 class="hero-title">
       نبني <span class="text-accent">الثقة</span> قبل الحجر
@@ -1072,7 +1072,7 @@
     }
   }
 
-  // ═══════════════════ Secret Code ═══════════════════
+  // ═══════════════════ Secret Code (219) ═══════════════════
   let typedBuffer = "";
   let typedTimer = null;
 
@@ -1103,29 +1103,68 @@
     }
   });
 
-  // ═══════════════════ Secret Trigger ═══════════════════
+  // ═══════════════════ Secret Trigger (Hidden Dot + Hero Badge) ═══════════════════
   function bindSecretTrigger() {
+    // ═══ 1) النقطة المخفية في الأسفل ═══
     const trigger = document.getElementById("secretTrigger");
-    if (!trigger) return;
+    if (trigger) {
+      let clickCount = 0;
+      let clickTimer = null;
 
-    let clickCount = 0;
-    let clickTimer = null;
-
-    trigger.addEventListener("dblclick", (e) => {
-      e.stopPropagation();
-      openLogin();
-    });
-
-    trigger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
-      if (clickCount >= 5) {
-        clickCount = 0;
+      trigger.addEventListener("dblclick", (e) => {
+        e.stopPropagation();
         openLogin();
-      }
-    });
+      });
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        clickCount++;
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
+        if (clickCount >= 5) {
+          clickCount = 0;
+          openLogin();
+        }
+      });
+    }
+
+    // ═══ 2) جملة "خبرة أكثر من 20 عاماً" — 10 نقرات ═══
+    const adminTrigger = document.getElementById("adminTrigger");
+    if (adminTrigger) {
+      let adminClickCount = 0;
+      let adminClickTimer = null;
+
+      adminTrigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        adminClickCount++;
+
+        console.log(`👆 نقرة ${adminClickCount} من 10`);
+
+        clearTimeout(adminClickTimer);
+        adminClickTimer = setTimeout(() => {
+          adminClickCount = 0;
+          console.log("🔄 تم تصفير العدّاد — انتظرت أكثر من 3 ثوانٍ");
+        }, 3000);
+
+        if (adminClickCount >= 10) {
+          adminClickCount = 0;
+          clearTimeout(adminClickTimer);
+          console.log("✅ تم اكتشاف 10 نقرات — فتح لوحة الأدمن");
+          openLogin();
+        }
+      });
+
+      // منع النقر بزر الفأرة الأيمن
+      adminTrigger.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+
+      // تحسين التجربة على الهاتف
+      adminTrigger.style.userSelect = "none";
+      adminTrigger.style.webkitUserSelect = "none";
+      adminTrigger.style.webkitTapHighlightColor = "transparent";
+      adminTrigger.style.cursor = "pointer";
+    }
   }
 
   // ═══════════════════ Count Up ═══════════════════
