@@ -645,6 +645,58 @@ function setToken(token) {
   // ════════════════════════════════════════════════════════════
   // 🚀 بدء التشغيل
   // ════════════════════════════════════════════════════════════
+ // 🔑 ربط أزرار التوكن
+function bindTokenUI() {
+  const tokenSection = document.getElementById("tokenSection");
+  const tokenInput = document.getElementById("tokenInput");
+  const saveBtn = document.getElementById("saveToken");
+  const status = document.getElementById("tokenStatus");
+
+  if (!tokenSection) return;
+
+  // عرض حالة التوكن
+  function updateStatus() {
+    const token = getToken();
+    if (token) {
+      status.textContent = "✅ التوكن محفوظ في هذا المتصفح";
+      status.style.color = "#2e7d32";
+      tokenInput.value = token;
+    } else {
+      status.textContent = "⚠️ لم يتم إعداد التوكن بعد — ارفع صورة لن تعمل";
+      status.style.color = "#d33";
+    }
+  }
+
+  saveBtn.addEventListener("click", async () => {
+    const token = tokenInput.value.trim();
+    if (!token) return alert("أدخل التوكن أولاً");
+    if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) {
+      return alert("التوكن غير صالح (يجب أن يبدأ بـ ghp_ أو github_pat_)");
+    }
+
+    saveBtn.textContent = "⏳ جاري التحقق...";
+    saveBtn.disabled = true;
+
+    try {
+      // التحقق من التوكن عبر GitHub API
+      const res = await fetch("https://api.github.com/user", {
+        headers: { "Authorization": `token ${token}` }
+      });
+      if (!res.ok) throw new Error("التوكن غير صحيح أو منتهي");
+
+      setToken(token);
+      alert("✅ تم حفظ التوكن بنجاح");
+      updateStatus();
+    } catch (e) {
+      alert("❌ " + e.message);
+    } finally {
+      saveBtn.textContent = "💾 حفظ التوكن";
+      saveBtn.disabled = false;
+    }
+  });
+
+  updateStatus();
+}
   function init() {
     bindButtons();
     bindSecretTrigger();
