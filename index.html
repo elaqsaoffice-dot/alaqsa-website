@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0A4DA6">
 <title>شركة الأقصى للمقاولات العامة | Al-Aqsa General Contracting</title>
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -15,7 +15,6 @@
 <div id="preloader">
   <div class="preloader-content">
     <div class="preloader-logo">
-      <div class="preloader-ring"></div>
       <div class="preloader-ring"></div>
       <div class="preloader-ring"></div>
       <span class="preloader-letter">أ</span>
@@ -27,13 +26,6 @@
 
 <!-- Scroll Progress -->
 <div id="scrollProgress"></div>
-
-<!-- Cursor -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-outline" id="cursorOutline"></div>
-
-<!-- Particles -->
-<div id="particles"></div>
 
 <!-- Header -->
 <header id="header">
@@ -61,19 +53,15 @@
 
 <!-- Hero -->
 <section id="home" class="hero">
-  <div class="hero-bg-animation"></div>
+  <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
-
-  <div class="hero-shape shape-1"></div>
-  <div class="hero-shape shape-2"></div>
-  <div class="hero-shape shape-3"></div>
 
   <div class="hero-content">
     <div class="hero-badge">🏗️ خبرة أكثر من 20 عاماً</div>
 
     <h2 class="hero-title">
-      <span class="hero-line">نبني <span class="text-gradient">الثقة</span></span>
-      <span class="hero-line">قبل المباني</span>
+      نبني <span class="text-accent">الثقة</span><br>
+      قبل المباني
     </h2>
 
     <p class="hero-desc">
@@ -83,26 +71,24 @@
     <div class="hero-contacts">
       <a href="tel:01150335582" class="hero-chip">📞 01150335582</a>
       <a href="mailto:elaqsaoffice@gmail.com" class="hero-chip">✉️ elaqsaoffice@gmail.com</a>
-      <span class="hero-chip">📍 المنيا – ميدان الساعة</span>
     </div>
 
     <div class="hero-buttons">
       <a href="#projects" class="btn-primary">
-        <span>استعرض أعمالنا</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        استعرض أعمالنا
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="#contact" class="btn-ghost">تواصل معنا</a>
+      <a href="#contact" class="btn-outline">تواصل معنا</a>
     </div>
   </div>
 
   <div class="scroll-indicator">
     <div class="mouse"><div class="wheel"></div></div>
-    <span>اسحب للأسفل</span>
   </div>
 </section>
 
 <!-- About -->
-<section id="about" class="section">
+<section id="about" class="section section-light">
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label">— من نحن —</span>
@@ -122,25 +108,31 @@
         </p>
         <a href="#projects" class="link-arrow">
           اكتشف المزيد
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
 
-      <div class="about-visual reveal">
-        <div class="about-card card-1">
-          <div class="about-icon">🏗️</div>
-          <h4>خبرة عميقة</h4>
-          <p>أكثر من 20 عاماً في السوق المصري</p>
+      <div class="about-features reveal">
+        <div class="feature-card">
+          <div class="feature-icon">🏗️</div>
+          <div>
+            <h4>خبرة عميقة</h4>
+            <p>أكثر من 20 عاماً في السوق المصري</p>
+          </div>
         </div>
-        <div class="about-card card-2">
-          <div class="about-icon">🎯</div>
-          <h4>دقة التنفيذ</h4>
-          <p>التزام تام بالمواعيد والمواصفات</p>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div>
+            <h4>دقة التنفيذ</h4>
+            <p>التزام تام بالمواعيد والمواصفات</p>
+          </div>
         </div>
-        <div class="about-card card-3">
-          <div class="about-icon">🏆</div>
-          <h4>جودة عالمية</h4>
-          <p>معايير عالمية في كل مشروع</p>
+        <div class="feature-card">
+          <div class="feature-icon">🏆</div>
+          <div>
+            <h4>جودة عالمية</h4>
+            <p>معايير عالمية في كل مشروع</p>
+          </div>
         </div>
       </div>
     </div>
@@ -171,47 +163,41 @@
 </section>
 
 <!-- Services -->
-<section id="services" class="section dark-section">
+<section id="services" class="section section-gray">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label light">— خدماتنا —</span>
-      <h2 class="section-title light">حلول إنشائية متكاملة</h2>
-      <p class="section-subtitle light">نقدم مجموعة واسعة من الخدمات الإنشائية بأعلى معايير الجودة</p>
+      <span class="section-label">— خدماتنا —</span>
+      <h2 class="section-title">حلول إنشائية متكاملة</h2>
+      <p class="section-subtitle">نقدم مجموعة واسعة من الخدمات الإنشائية بأعلى معايير الجودة</p>
     </div>
 
     <div class="services-grid">
       <div class="service-card reveal">
-        <div class="service-number">01</div>
         <div class="service-icon">🏢</div>
         <h3>المباني السكنية</h3>
         <p>تنفيذ مباني سكنية بأحدث التصاميم وأعلى معايير الجودة والسلامة</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-number">02</div>
         <div class="service-icon">🏬</div>
         <h3>المشاريع التجارية</h3>
         <p>عمارات تجارية ومراكز تسوق بمواصفات عالمية وتشطيبات فاخرة</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-number">03</div>
         <div class="service-icon">🛣️</div>
         <h3>البنية التحتية</h3>
         <p>تنفيذ مشاريع البنية التحتية من طرق وكباري وشبكات مرافق</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-number">04</div>
         <div class="service-icon">🏛️</div>
         <h3>المشاريع الحكومية</h3>
         <p>تنفيذ المشاريع الحكومية بأعلى معايير الجودة والاعتمادية</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-number">05</div>
         <div class="service-icon">🎨</div>
         <h3>التشطيبات الفاخرة</h3>
         <p>تشطيبات داخلية وخارجية بأحدث الخامات وأرقى التصاميم</p>
       </div>
       <div class="service-card reveal">
-        <div class="service-number">06</div>
         <div class="service-icon">📐</div>
         <h3>الإشراف الهندسي</h3>
         <p>إشراف هندسي كامل على المشاريع من البداية حتى التسليم</p>
@@ -221,7 +207,7 @@
 </section>
 
 <!-- Projects -->
-<section id="projects" class="section projects-section">
+<section id="projects" class="section section-light">
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label">— مشاريعنا —</span>
@@ -234,16 +220,16 @@
 </section>
 
 <!-- Contact -->
-<section id="contact" class="section dark-section">
+<section id="contact" class="section section-gray">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label light">— تواصل معنا —</span>
-      <h2 class="section-title light">هل لديك مشروع؟ لنتحدث</h2>
-      <p class="section-subtitle light">فريقنا جاهز لمساعدتك في أي وقت</p>
+      <span class="section-label">— تواصل معنا —</span>
+      <h2 class="section-title">هل لديك مشروع؟ لنتحدث</h2>
+      <p class="section-subtitle">فريقنا جاهز لمساعدتك في أي وقت</p>
     </div>
 
     <div class="contact-grid">
-      <div class="contact-card glass reveal">
+      <div class="contact-card reveal">
         <div class="contact-icon-wrap">
           <div class="contact-icon">📞</div>
         </div>
@@ -251,7 +237,7 @@
         <a href="tel:01150335582" class="contact-link" dir="ltr">01150335582</a>
       </div>
 
-      <div class="contact-card glass reveal">
+      <div class="contact-card reveal">
         <div class="contact-icon-wrap">
           <div class="contact-icon">✉️</div>
         </div>
@@ -259,7 +245,7 @@
         <a href="mailto:elaqsaoffice@gmail.com" class="contact-link" dir="ltr">elaqsaoffice@gmail.com</a>
       </div>
 
-      <div class="contact-card glass reveal">
+      <div class="contact-card reveal">
         <div class="contact-icon-wrap">
           <div class="contact-icon">📍</div>
         </div>
@@ -272,13 +258,9 @@
     </div>
 
     <div class="quick-contact reveal">
-      <a href="tel:01150335582" class="btn-primary">
-        <span>📞 اتصل الآن</span>
-      </a>
-      <a href="https://wa.me/201150335582" target="_blank" class="btn-whatsapp">
-        <span>💬 واتساب</span>
-      </a>
-      <a href="mailto:elaqsaoffice@gmail.com" class="btn-ghost">✉️ أرسل بريد</a>
+      <a href="tel:01150335582" class="btn-primary">📞 اتصل الآن</a>
+      <a href="https://wa.me/201150335582" target="_blank" class="btn-whatsapp">💬 واتساب</a>
+      <a href="mailto:elaqsaoffice@gmail.com" class="btn-outline">✉️ أرسل بريد</a>
     </div>
   </div>
 </section>
@@ -295,8 +277,7 @@
       <p>📞 <a href="tel:01150335582" class="footer-link" dir="ltr">01150335582</a></p>
       <p>✉️ <a href="mailto:elaqsaoffice@gmail.com" class="footer-link" dir="ltr">elaqsaoffice@gmail.com</a></p>
       <p class="footer-address">
-        📍 المنيا – ميدان الساعة – شارع النقراشي<br>
-        المتفرع من ابن خصيب – أمام الصياد للأسلحة
+        📍 المنيا – ميدان الساعة – شارع النقراشي – المتفرع من ابن خصيب – أمام الصياد للأسلحة
       </p>
     </div>
 
@@ -318,7 +299,7 @@
     <input type="password" id="adminPassword" placeholder="كلمة المرور" autocomplete="off">
     <div class="modal-buttons">
       <button id="loginBtn" class="btn-primary">دخول</button>
-      <button id="cancelLogin" class="btn-ghost">إلغاء</button>
+      <button id="cancelLogin" class="btn-outline">إلغاء</button>
     </div>
     <p id="loginError" class="error hidden">كلمة المرور غير صحيحة</p>
   </div>
@@ -331,7 +312,7 @@
 
     <div class="admin-section" id="tokenSection">
       <h4>🔑 إعداد الاتصال بـ GitHub</h4>
-      <p style="font-size:.85rem; color:#666; margin-bottom:12px;">
+      <p style="font-size:.85rem; color:#64748B; margin-bottom:12px;">
         الصق التوكن مرة واحدة، وسيُحفظ في هذا المتصفح فقط.
       </p>
       <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
@@ -365,8 +346,8 @@
     </div>
 
     <div class="modal-buttons">
-      <button id="logoutBtn" class="btn-ghost">خروج</button>
-      <button id="closeAdmin" class="btn-ghost">إغلاق</button>
+      <button id="logoutBtn" class="btn-outline">خروج</button>
+      <button id="closeAdmin" class="btn-outline">إغلاق</button>
     </div>
   </div>
 </div>
@@ -387,15 +368,9 @@
   const SECRET_CODE = "219";
   const ADMIN_PASSWORD = "AH219##";
 
-  // ════════════════════════════════════════════════════════════
-  // 🔑 Token
-  // ════════════════════════════════════════════════════════════
   function getToken() { return localStorage.getItem("alaqsa_github_token") || ""; }
   function setToken(t) { localStorage.setItem("alaqsa_github_token", t); }
 
-  // ════════════════════════════════════════════════════════════
-  // 📂 GitHub API
-  // ════════════════════════════════════════════════════════════
   const API_BASE = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents`;
 
   function apiHeaders() {
@@ -467,9 +442,6 @@
     await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🖼️ Logo
-  // ════════════════════════════════════════════════════════════
   async function loadLogo() {
     try {
       const content = await readFromGitHub("logo.json");
@@ -484,9 +456,6 @@
     } catch (e) {}
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 📋 Projects
-  // ════════════════════════════════════════════════════════════
   async function loadProjects() {
     const grid = document.getElementById("projectsGrid");
     if (!grid) return;
@@ -508,7 +477,6 @@
     projects.forEach((p, idx) => {
       const card = document.createElement("div");
       card.className = "project-card-pro";
-      card.style.transitionDelay = `${idx * 0.08}s`;
 
       card.innerHTML = `
         <div class="project-image-wrap">
@@ -518,10 +486,6 @@
               <span class="project-tag">مشروع منجز</span>
               <h3>${escapeHtml(p.title)}</h3>
               <p>${escapeHtml(p.description || "")}</p>
-              <button class="project-view-btn">
-                عرض التفاصيل
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </button>
             </div>
           </div>
         </div>
@@ -535,15 +499,11 @@
       grid.appendChild(card);
     });
 
-    // Reveal بعد الإضافة
     requestAnimationFrame(() => {
       document.querySelectorAll('.project-card-pro').forEach((el, i) => {
         setTimeout(() => el.classList.add('revealed'), i * 80);
       });
     });
-
-    // إعادة ربط cursor
-    if (window.__bindCursor) window.__bindCursor();
   }
 
   function escapeHtml(str) {
@@ -554,9 +514,6 @@
       .replace(/"/g, "&quot;");
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🔍 Lightbox
-  // ════════════════════════════════════════════════════════════
   function openLightbox(src, title, desc) {
     const lb = document.createElement("div");
     lb.className = "lightbox-pro";
@@ -600,9 +557,6 @@
     });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🪟 Modals
-  // ════════════════════════════════════════════════════════════
   function openLogin() {
     const modal = document.getElementById("loginModal");
     const pwd = document.getElementById("adminPassword");
@@ -629,7 +583,7 @@
     list.innerHTML = "";
 
     if (projects.length === 0) {
-      list.innerHTML = `<p style="text-align:center; color:#666;">لا توجد مشاريع بعد</p>`;
+      list.innerHTML = `<p style="text-align:center; color:#64748B;">لا توجد مشاريع بعد</p>`;
       return;
     }
 
@@ -660,11 +614,11 @@
       const token = getToken();
       if (token) {
         status.textContent = "✅ التوكن محفوظ";
-        status.style.color = "#2e7d32";
+        status.style.color = "#16A34A";
         tokenInput.value = token;
       } else {
         status.textContent = "⚠️ لم يتم إعداد التوكن";
-        status.style.color = "#d33";
+        status.style.color = "#DC2626";
       }
     }
 
@@ -818,9 +772,6 @@
     }
   }
 
-  // ════════════════════════════════════════════════════════════
-  // ⌨️ Secret Code
-  // ════════════════════════════════════════════════════════════
   let typedBuffer = "";
   let typedTimer = null;
 
@@ -851,9 +802,6 @@
     }
   });
 
-  // ════════════════════════════════════════════════════════════
-  // 🕵️ Secret Trigger
-  // ════════════════════════════════════════════════════════════
   function bindSecretTrigger() {
     const trigger = document.getElementById("secretTrigger");
     if (!trigger) return;
@@ -878,9 +826,6 @@
     });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🎭 Reveal on Scroll
-  // ════════════════════════════════════════════════════════════
   function initReveal() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -894,9 +839,6 @@
     document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🔢 Count Up
-  // ════════════════════════════════════════════════════════════
   function initCountUp() {
     const counters = document.querySelectorAll("[data-count]");
     const observer = new IntersectionObserver((entries) => {
@@ -904,7 +846,7 @@
         if (entry.isIntersecting) {
           const el = entry.target;
           const target = parseInt(el.dataset.count);
-          const duration = 2000;
+          const duration = 1800;
           const start = performance.now();
 
           function step(now) {
@@ -924,52 +866,6 @@
     counters.forEach(el => observer.observe(el));
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🖱️ Cursor
-  // ════════════════════════════════════════════════════════════
-  function initCursor() {
-    if (window.innerWidth < 1024) return;
-
-    const dot = document.getElementById("cursorDot");
-    const outline = document.getElementById("cursorOutline");
-    if (!dot || !outline) return;
-
-    let mouseX = 0, mouseY = 0;
-    let outlineX = 0, outlineY = 0;
-
-    document.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      dot.style.left = mouseX + "px";
-      dot.style.top = mouseY + "px";
-    });
-
-    function animate() {
-      outlineX += (mouseX - outlineX) * 0.2;
-      outlineY += (mouseY - outlineY) * 0.2;
-      outline.style.left = outlineX + "px";
-      outline.style.top = outlineY + "px";
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // ربط العناصر
-    function bindCursor() {
-      document.querySelectorAll("a, button, .project-card-pro, .service-card, .contact-card, .stat-item").forEach(el => {
-        if (el.dataset.cursorBound) return;
-        el.dataset.cursorBound = "1";
-        el.addEventListener("mouseenter", () => outline.classList.add("grow"));
-        el.addEventListener("mouseleave", () => outline.classList.remove("grow"));
-      });
-    }
-
-    bindCursor();
-    window.__bindCursor = bindCursor;
-  }
-
-  // ════════════════════════════════════════════════════════════
-  // 📊 Scroll Progress + Back to Top
-  // ════════════════════════════════════════════════════════════
   function initScrollProgress() {
     const bar = document.getElementById("scrollProgress");
     const backBtn = document.getElementById("backToTop");
@@ -990,30 +886,6 @@
     });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // ✨ Particles
-  // ════════════════════════════════════════════════════════════
-  function initParticles() {
-    const container = document.getElementById("particles");
-    if (!container) return;
-
-    const count = window.innerWidth < 768 ? 12 : 25;
-
-    for (let i = 0; i < count; i++) {
-      const p = document.createElement("div");
-      p.className = "particle";
-      p.style.left = Math.random() * 100 + "%";
-      p.style.animationDelay = Math.random() * 15 + "s";
-      p.style.animationDuration = (15 + Math.random() * 15) + "s";
-      p.style.opacity = 0.15 + Math.random() * 0.25;
-      p.style.width = p.style.height = (2 + Math.random() * 3) + "px";
-      container.appendChild(p);
-    }
-  }
-
-  // ════════════════════════════════════════════════════════════
-  // 🎬 Preloader
-  // ════════════════════════════════════════════════════════════
   function initPreloader() {
     const preloader = document.getElementById("preloader");
     if (!preloader) return;
@@ -1022,22 +894,17 @@
       preloader.classList.add("done");
       setTimeout(() => {
         preloader.style.display = "none";
-        document.body.classList.add("loaded");
-      }, 700);
+      }, 600);
     }
 
     if (document.readyState === "complete") {
-      setTimeout(hide, 1200);
+      setTimeout(hide, 1000);
     } else {
-      window.addEventListener("load", () => setTimeout(hide, 1200));
-      // Failsafe
-      setTimeout(hide, 3500);
+      window.addEventListener("load", () => setTimeout(hide, 1000));
+      setTimeout(hide, 3000);
     }
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🍔 Mobile Menu
-  // ════════════════════════════════════════════════════════════
   function initMobileMenu() {
     const toggle = document.getElementById("menuToggle");
     const nav = document.getElementById("mainNav");
@@ -1056,9 +923,6 @@
     });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 📌 Header on Scroll
-  // ════════════════════════════════════════════════════════════
   function initHeaderScroll() {
     const header = document.getElementById("header");
     if (!header) return;
@@ -1067,7 +931,7 @@
     window.addEventListener("scroll", () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          if (window.scrollY > 100) header.classList.add("scrolled");
+          if (window.scrollY > 60) header.classList.add("scrolled");
           else header.classList.remove("scrolled");
           ticking = false;
         });
@@ -1076,9 +940,6 @@
     }, { passive: true });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🎯 Active Nav
-  // ════════════════════════════════════════════════════════════
   function initActiveNav() {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -1097,18 +958,13 @@
     }, { passive: true });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🚀 Init
-  // ════════════════════════════════════════════════════════════
   function init() {
     bindButtons();
     bindTokenUI();
     bindSecretTrigger();
     initReveal();
     initCountUp();
-    initCursor();
     initScrollProgress();
-    initParticles();
     initPreloader();
     initMobileMenu();
     initHeaderScroll();
