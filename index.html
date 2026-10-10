@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="شركة الأقصى للمقاولات العامة - المنيا">
 <meta name="theme-color" content="#0A4DA6">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>شركة الأقصى للمقاولات العامة | Al-Aqsa General Contracting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +13,6 @@
 </head>
 <body>
 
-<!-- Preloader -->
 <div id="preloader">
   <div class="preloader-box">
     <div class="preloader-spinner"></div>
@@ -23,10 +20,8 @@
   </div>
 </div>
 
-<!-- Scroll Progress -->
 <div id="scrollProgress"></div>
 
-<!-- Header -->
 <header id="header">
   <div class="container header-inner">
     <div class="logo-area">
@@ -50,7 +45,6 @@
   </div>
 </header>
 
-<!-- Hero -->
 <section id="home" class="hero">
   <div class="hero-content">
     <div class="hero-badge">🏗️ خبرة أكثر من 20 عاماً</div>
@@ -76,7 +70,6 @@
   </div>
 </section>
 
-<!-- About -->
 <section id="about" class="section section-white">
   <div class="container">
     <div class="section-header">
@@ -147,7 +140,6 @@
   </div>
 </section>
 
-<!-- Services -->
 <section id="services" class="section section-gray">
   <div class="container">
     <div class="section-header">
@@ -191,7 +183,6 @@
   </div>
 </section>
 
-<!-- Projects -->
 <section id="projects" class="section section-white">
   <div class="container">
     <div class="section-header">
@@ -204,7 +195,6 @@
   </div>
 </section>
 
-<!-- Contact -->
 <section id="contact" class="section section-gray">
   <div class="container">
     <div class="section-header">
@@ -244,7 +234,6 @@
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <div class="container footer-inner">
     <div class="footer-brand">
@@ -268,7 +257,6 @@
   <button id="backToTop" class="back-to-top" aria-label="العودة للأعلى">↑</button>
 </footer>
 
-<!-- Login Modal -->
 <div id="loginModal" class="modal hidden">
   <div class="modal-content login-content">
     <h3>🔒 دخول المسؤول</h3>
@@ -281,7 +269,6 @@
   </div>
 </div>
 
-<!-- Admin Panel -->
 <div id="adminPanel" class="modal hidden">
   <div class="modal-content admin-content">
     <h3>🛠 لوحة تحكم المسؤول</h3>
@@ -384,6 +371,23 @@
     return await res.json();
   }
 
+  // قراءة ملف من GitHub بدون توكن — من GitHub Pages أو jsDelivr
+  async function readPublicFile(path) {
+    const urls = [
+      `https://elaqsaoffice-dot.github.io/alaqsa-website/${path}?t=${Date.now()}`,
+      `https://cdn.jsdelivr.net/gh/${GITHUB_USERNAME}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}?t=${Date.now()}`
+    ];
+
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) return await res.text();
+      } catch (e) { /* جرب الرابط التالي */ }
+    }
+    return null;
+  }
+
+  // قراءة ملف من GitHub مع توكن (للأدمن فقط)
   async function readFromGitHub(path) {
     const url = `${API_BASE}/${path}?t=${Date.now()}`;
     const res = await fetch(url, { headers: apiHeaders() });
@@ -396,80 +400,119 @@
     return `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
   }
 
-  // ═══════════════════ Projects Data ═══════════════════
-  async function loadProjectsData() {
-    try {
-      const content = await readFromGitHub(DATA_FILE);
-      if (!content) return [];
-      return JSON.parse(content);
-    } catch (e) { return []; }
-  }
-
-  async function saveProjectsData(projects) {
-    const json = JSON.stringify(projects, null, 2);
-    const content = btoa(unescape(encodeURIComponent(json)));
-    await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
+  function getImageUrlCDN(path) {
+    return `https://cdn.jsdelivr.net/gh/${GITHUB_USERNAME}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
   }
 
   // ═══════════════════ Logo ═══════════════════
-  async function loadLogo() {
-    const img = document.getElementById("siteLogo");
-    const logoText = document.querySelector(".logo-text");
-    if (!img) return;
-
-    // 1) تحقق أولاً من localStorage (سريع + بدون إنترنت)
-    const cachedLogo = localStorage.getItem("alaqsa_logo_data");
-    if (cachedLogo) {
-      img.src = cachedLogo;
-      img.style.display = "block";
-      if (logoText) logoText.style.display = "none";
-      console.log("✅ الشعار من التخزين المحلي");
-      return;
-    }
-
-    // 2) إذا لا يوجد، حاول التحميل من GitHub
-    try {
-      const content = await readFromGitHub("logo.json");
-      if (!content) return;
-
-      const data = JSON.parse(content);
-      if (!data.url) return;
+  function loadLogoImage(url, img, logoText) {
+    return new Promise((resolve) => {
+      const timeout = setTimeout(() => {
+        console.warn("⏱ انتهت مهلة تحميل الشعار");
+        img.style.display = "none";
+        if (logoText) logoText.style.display = "block";
+        resolve(false);
+      }, 8000);
 
       img.onload = () => {
+        clearTimeout(timeout);
         img.style.display = "block";
         if (logoText) logoText.style.display = "none";
         console.log("✅ تم تحميل الشعار");
+        resolve(true);
 
-        // حفظ نسخة Base64 للزيارات القادمة
+        // حفظ في localStorage
         try {
-          fetch(data.url)
+          fetch(url)
             .then(r => r.blob())
             .then(blob => {
               const reader = new FileReader();
               reader.onloadend = () => {
                 try {
                   localStorage.setItem("alaqsa_logo_data", reader.result);
-                } catch (e) {
-                  console.warn("لا يمكن حفظ الشعار محلياً:", e);
-                }
+                  console.log("💾 تم حفظ الشعار محلياً");
+                } catch (e) {}
               };
               reader.readAsDataURL(blob);
-            });
+            })
+            .catch(() => {});
         } catch (e) {}
       };
 
       img.onerror = () => {
-        console.warn("⚠️ فشل تحميل الشعار — عرض النص");
+        clearTimeout(timeout);
+        console.warn("⚠️ فشل تحميل الشعار من:", url);
         img.style.display = "none";
         if (logoText) logoText.style.display = "block";
+        resolve(false);
       };
 
-      img.src = data.url;
-    } catch (e) {
-      console.warn("خطأ في الشعار:", e);
-      img.style.display = "none";
-      if (logoText) logoText.style.display = "block";
+      img.src = url;
+    });
+  }
+
+  async function loadLogo() {
+    const img = document.getElementById("siteLogo");
+    const logoText = document.querySelector(".logo-text");
+    if (!img) return;
+
+    // 1) localStorage أولاً
+    const cached = localStorage.getItem("alaqsa_logo_data");
+    if (cached && cached.length > 100) {
+      img.src = cached;
+      img.style.display = "block";
+      if (logoText) logoText.style.display = "none";
+      console.log("✅ الشعار من localStorage");
+      return;
     }
+
+    // 2) اقرأ logo.json بدون توكن
+    try {
+      const content = await readPublicFile("logo.json");
+      if (content) {
+        const data = JSON.parse(content);
+        if (data && data.url) {
+          // حوّل الرابط إلى jsDelivr للأداء الأفضل
+          let logoUrl = data.url;
+          if (logoUrl.includes("raw.githubusercontent.com")) {
+            logoUrl = logoUrl
+              .replace("https://raw.githubusercontent.com/", "https://cdn.jsdelivr.net/gh/")
+              .replace(`/${GITHUB_BRANCH}/`, `@${GITHUB_BRANCH}/`);
+          }
+          const success = await loadLogoImage(logoUrl, img, logoText);
+          if (success) return;
+        }
+      }
+    } catch (e) {
+      console.warn("فشل قراءة logo.json:", e);
+    }
+
+    // 3) احتياطي
+    console.warn("⚠️ استخدام الرابط الاحتياطي");
+    const fallback = getImageUrlCDN("images/logo_1791627223517.png");
+    await loadLogoImage(fallback, img, logoText);
+  }
+
+  // ═══════════════════ Projects Data ═══════════════════
+  async function loadProjectsData() {
+    try {
+      const publicContent = await readPublicFile(DATA_FILE);
+      if (publicContent) {
+        return JSON.parse(publicContent);
+      }
+
+      const content = await readFromGitHub(DATA_FILE);
+      if (!content) return [];
+      return JSON.parse(content);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async function saveProjectsData(projects) {
+    const json = JSON.stringify(projects, null, 2);
+    const content = btoa(unescape(encodeURIComponent(json)));
+    await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
   }
 
   // ═══════════════════ Projects Display ═══════════════════
@@ -495,9 +538,17 @@
       const card = document.createElement("div");
       card.className = "project-card";
 
+      // تحويل الرابط إلى jsDelivr للأداء
+      let imgUrl = p.image;
+      if (imgUrl.includes("raw.githubusercontent.com")) {
+        imgUrl = imgUrl
+          .replace("https://raw.githubusercontent.com/", "https://cdn.jsdelivr.net/gh/")
+          .replace(`/${GITHUB_BRANCH}/`, `@${GITHUB_BRANCH}/`);
+      }
+
       card.innerHTML = `
         <div class="project-image">
-          <img src="${p.image}" alt="${escapeHtml(p.title)}" loading="lazy">
+          <img src="${imgUrl}" alt="${escapeHtml(p.title)}" loading="lazy">
           <div class="project-overlay">
             <span class="project-tag">مشروع منجز</span>
             <h3>${escapeHtml(p.title)}</h3>
@@ -510,7 +561,7 @@
         </div>
       `;
 
-      card.addEventListener("click", () => openLightbox(p.image, p.title, p.description));
+      card.addEventListener("click", () => openLightbox(imgUrl, p.title, p.description));
       grid.appendChild(card);
     });
   }
@@ -719,7 +770,7 @@
           const logoJson = btoa(JSON.stringify({ url }));
           await uploadToGitHub("logo.json", logoJson, "تحديث الشعار");
 
-          // حفظ مباشر في localStorage ليظهر فوراً
+          // حفظ في localStorage مباشرة
           try {
             localStorage.setItem("alaqsa_logo_data", `data:image/${ext};base64,${base64}`);
           } catch (e) {}
@@ -927,7 +978,6 @@
       });
     });
 
-    // إغلاق عند الضغط خارج القائمة
     document.addEventListener("click", (e) => {
       if (nav.classList.contains("open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
         nav.classList.remove("open");
