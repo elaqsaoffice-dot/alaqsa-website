@@ -4,90 +4,264 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="شركة الأقصى للمقاولات العامة - المنيا - خبرة وإتقان في تنفيذ المشاريع الإنشائية">
+<meta name="theme-color" content="#0A4DA6">
 <title>شركة الأقصى للمقاولات العامة | Al-Aqsa General Contracting</title>
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- ===== الهيدر ===== -->
+<!-- ═══════════════════ Preloader ═══════════════════ -->
+<div id="preloader">
+  <div class="preloader-content">
+    <div class="preloader-logo">
+      <div class="preloader-ring"></div>
+      <div class="preloader-ring"></div>
+      <div class="preloader-ring"></div>
+      <span class="preloader-letter">أ</span>
+    </div>
+    <p class="preloader-text">شركة الأقصى للمقاولات العامة</p>
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ Progress Bar ═══════════════════ -->
+<div id="scrollProgress"></div>
+
+<!-- ═══════════════════ Custom Cursor ═══════════════════ -->
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
+
+<!-- ═══════════════════ Floating Particles ═══════════════════ -->
+<div id="particles"></div>
+
+<!-- ═══════════════════ Header ═══════════════════ -->
 <header id="header">
   <div class="container header-inner">
-    <div class="logo-area">
+    <div class="logo-area" data-tilt>
       <img id="siteLogo" src="" alt="شعار الشركة" class="logo-img" style="display:none;">
       <div class="logo-text">
         <h1>شركة الأقصى للمقاولات العامة</h1>
       </div>
     </div>
-    <nav>
-      <a href="#home">الرئيسية</a>
-      <a href="#about">من نحن</a>
-      <a href="#projects">مشاريعنا</a>
-      <a href="#contact">اتصل بنا</a>
+    <nav class="main-nav">
+      <a href="#home" class="nav-link active">الرئيسية</a>
+      <a href="#about" class="nav-link">من نحن</a>
+      <a href="#services" class="nav-link">خدماتنا</a>
+      <a href="#projects" class="nav-link">مشاريعنا</a>
+      <a href="#contact" class="nav-link">اتصل بنا</a>
     </nav>
+    <button class="menu-toggle" aria-label="القائمة">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
-<!-- ===== الهيرو ===== -->
+<!-- ═══════════════════ Hero ═══════════════════ -->
 <section id="home" class="hero">
+  <div class="hero-bg-animation"></div>
   <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h2>نبني الثقة قبل المباني</h2>
-    <p>شركة الأقصى للمقاولات العامة – خبرة وإتقان في تنفيذ المشاريع الإنشائية</p>
-    <p class="hero-contact">
-      📞 01150335582 &nbsp;|&nbsp; ✉️ elaqsaoffice@gmail.com &nbsp;|&nbsp; 📍 المنيا – ميدان الساعة
+
+  <!-- أشكال هندسية متحركة -->
+  <div class="hero-shape shape-1"></div>
+  <div class="hero-shape shape-2"></div>
+  <div class="hero-shape shape-3"></div>
+
+  <div class="hero-content" data-parallax>
+    <div class="hero-badge" data-reveal>🏗️ خبرة أكثر من 20 عاماً</div>
+    <h2 class="hero-title">
+      <span class="hero-line" data-reveal>نبني <span class="text-gradient">الثقة</span></span>
+      <span class="hero-line" data-reveal>قبل المباني</span>
+    </h2>
+    <p class="hero-desc" data-reveal>
+      شركة الأقصى للمقاولات العامة — خبرة وإتقان في تنفيذ المشاريع الإنشائية بأعلى معايير الجودة العالمية
     </p>
-    <a href="#projects" class="btn-primary">استعرض أعمالنا</a>
+    <div class="hero-contacts" data-reveal>
+      <a href="tel:01150335582" class="hero-chip">📞 01150335582</a>
+      <a href="mailto:elaqsaoffice@gmail.com" class="hero-chip">✉️ elaqsaoffice@gmail.com</a>
+      <a href="#" class="hero-chip">📍 المنيا – ميدان الساعة</a>
+    </div>
+    <div class="hero-buttons" data-reveal>
+      <a href="#projects" class="btn-primary btn-glow">
+        <span>استعرض أعمالنا</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contact" class="btn-ghost">تواصل معنا</a>
+    </div>
+  </div>
+
+  <!-- مؤشر Scroll -->
+  <div class="scroll-indicator">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+    <span>اسحب للأسفل</span>
   </div>
 </section>
 
-<!-- ===== من نحن ===== -->
+<!-- ═══════════════════ About ═══════════════════ -->
 <section id="about" class="section">
   <div class="container">
-    <h2 class="section-title">من نحن</h2>
-    <p class="about-text">
-      شركة الأقصى للمقاولات العامة متخصصة في تنفيذ المشاريع الإنشائية الكبرى،
-      من المباني السكنية والتجارية إلى البنية التحتية والمشاريع الحكومية.
-      نلتزم بأعلى معايير الجودة والسلامة والمواعيد.
-    </p>
-    <div class="stats">
-      <div class="stat"><h3>+150</h3><p>مشروع منجز</p></div>
-      <div class="stat"><h3>+20</h3><p>سنة خبرة</p></div>
-      <div class="stat"><h3>+300</h3><p>عميل راضٍ</p></div>
+    <div class="section-header" data-reveal>
+      <span class="section-label">— من نحن —</span>
+      <h2 class="section-title">نبني المستقبل بأيدٍ خبيرة</h2>
+      <p class="section-subtitle">شركة الأقصى للمقاولات العامة متخصصة في تنفيذ المشاريع الإنشائية الكبرى</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text" data-reveal>
+        <p>
+          نعمل في مجال المقاولات العامة منذ أكثر من عقدين، متخصصين في تنفيذ المشاريع الإنشائية الكبرى،
+          من المباني السكنية والتجارية إلى البنية التحتية والمشاريع الحكومية.
+        </p>
+        <p>
+          نلتزم بأعلى معايير الجودة والسلامة والمواعيد، ونستخدم أحدث التقنيات في التنفيذ والإشراف
+          لضمان تقديم مشاريع تفوق توقعات عملائنا.
+        </p>
+        <a href="#projects" class="link-arrow">
+          اكتشف المزيد
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="about-visual" data-reveal>
+        <div class="about-card card-1">
+          <div class="about-icon">🏗️</div>
+          <h4>خبرة عميقة</h4>
+          <p>أكثر من 20 عاماً في السوق المصري</p>
+        </div>
+        <div class="about-card card-2">
+          <div class="about-icon">🎯</div>
+          <h4>دقة التنفيذ</h4>
+          <p>التزام تام بالمواعيد والمواصفات</p>
+        </div>
+        <div class="about-card card-3">
+          <div class="about-icon">🏆</div>
+          <h4>جودة عالمية</h4>
+          <p>معايير عالمية في كل مشروع</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-item" data-reveal>
+        <div class="stat-icon">📊</div>
+        <h3 class="stat-number" data-count="150">0</h3>
+        <p>مشروع منجز</p>
+      </div>
+      <div class="stat-item" data-reveal>
+        <div class="stat-icon">⏳</div>
+        <h3 class="stat-number" data-count="20">0</h3>
+        <p>سنة خبرة</p>
+      </div>
+      <div class="stat-item" data-reveal>
+        <div class="stat-icon">😊</div>
+        <h3 class="stat-number" data-count="300">0</h3>
+        <p>عميل راضٍ</p>
+      </div>
+      <div class="stat-item" data-reveal>
+        <div class="stat-icon">👷</div>
+        <h3 class="stat-number" data-count="500">0</h3>
+        <p>عامل وفني</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===== المشاريع ===== -->
-<section id="projects" class="section dark-section">
+<!-- ═══════════════════ Services ═══════════════════ -->
+<section id="services" class="section dark-section services-section">
   <div class="container">
-    <h2 class="section-title light">مشاريعنا</h2>
+    <div class="section-header" data-reveal>
+      <span class="section-label light">— خدماتنا —</span>
+      <h2 class="section-title light">حلول إنشائية متكاملة</h2>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card" data-reveal data-tilt>
+        <div class="service-number">01</div>
+        <div class="service-icon">🏢</div>
+        <h3>المباني السكنية</h3>
+        <p>تنفيذ مباني سكنية بأحدث التصاميم وأعلى معايير الجودة والسلامة</p>
+      </div>
+      <div class="service-card" data-reveal data-tilt>
+        <div class="service-number">02</div>
+        <div class="service-icon">🏬</div>
+        <h3>المشاريع التجارية</h3>
+        <p>عمارات تجارية ومراكز تسوق بمواصفات عالمية وتشطيبات فاخرة</p>
+      </div>
+      <div class="service-card" data-reveal data-tilt>
+        <div class="service-number">03</div>
+        <div class="service-icon">🛣️</div>
+        <h3>البنية التحتية</h3>
+        <p>تنفيذ مشاريع البنية التحتية من طرق وكباري وشبكات مرافق</p>
+      </div>
+      <div class="service-card" data-reveal data-tilt>
+        <div class="service-number">04</div>
+        <div class="service-icon">🏛️</div>
+        <h3>المشاريع الحكومية</h3>
+        <p>تنفيذ المشاريع الحكومية بأعلى معايير الجودة والاعتمادية</p>
+      </div>
+      <div class="service-card" data-reveal data-tilt>
+        <div class="service-number">05</div>
+        <div class="service-icon">🎨</div>
+        <h3>التشطيبات الفاخرة</h3>
+        <p>تشطيبات داخلية وخارجية بأحدث الخامات وأرقى التصاميم</p>
+      </div>
+      <div class="service-card" data-reveal data-tilt>
+        <div class="service-number">06</div>
+        <div class="service-icon">📐</div>
+        <h3>الإشراف الهندسي</h3>
+        <p>إشراف هندسي كامل على المشاريع من البداية حتى التسليم</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ Projects ═══════════════════ -->
+<section id="projects" class="section projects-section">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">— مشاريعنا —</span>
+      <h2 class="section-title">أعمال تتحدث عن نفسها</h2>
+      <p class="section-subtitle">مجموعة مختارة من أفضل مشاريعنا المنفذة</p>
+    </div>
+
     <div id="projectsGrid" class="projects-grid"></div>
   </div>
 </section>
 
-<!-- ===== اتصل بنا ===== -->
-<section id="contact" class="section">
+<!-- ═══════════════════ Contact ═══════════════════ -->
+<section id="contact" class="section dark-section contact-section">
   <div class="container">
-    <h2 class="section-title">اتصل بنا</h2>
-    <p class="contact-subtitle">يسعدنا تواصلكم معنا في أي وقت</p>
+    <div class="section-header" data-reveal>
+      <span class="section-label light">— تواصل معنا —</span>
+      <h2 class="section-title light">هل لديك مشروع؟ لنتحدث</h2>
+      <p class="section-subtitle light">فريقنا جاهز لمساعدتك في أي وقت</p>
+    </div>
 
     <div class="contact-grid">
 
-      <div class="contact-card">
-        <div class="contact-icon">📞</div>
+      <div class="contact-card glass" data-reveal data-tilt>
+        <div class="contact-icon-wrap">
+          <div class="contact-icon">📞</div>
+        </div>
         <h4>الهاتف</h4>
         <a href="tel:01150335582" class="contact-link" dir="ltr">01150335582</a>
       </div>
 
-      <div class="contact-card">
-        <div class="contact-icon">✉️</div>
+      <div class="contact-card glass" data-reveal data-tilt>
+        <div class="contact-icon-wrap">
+          <div class="contact-icon">✉️</div>
+        </div>
         <h4>البريد الإلكتروني</h4>
         <a href="mailto:elaqsaoffice@gmail.com" class="contact-link" dir="ltr">elaqsaoffice@gmail.com</a>
       </div>
 
-      <div class="contact-card">
-        <div class="contact-icon">📍</div>
+      <div class="contact-card glass" data-reveal data-tilt>
+        <div class="contact-icon-wrap">
+          <div class="contact-icon">📍</div>
+        </div>
         <h4>العنوان</h4>
         <p class="contact-address">
           المنيا – ميدان الساعة – شارع النقراشي<br>
@@ -97,65 +271,83 @@
 
     </div>
 
-    <div class="quick-contact">
-      <a href="tel:01150335582" class="btn-primary">📞 اتصل الآن</a>
-      <a href="https://wa.me/201150335582" target="_blank" class="btn-whatsapp">💬 واتساب</a>
-      <a href="mailto:elaqsaoffice@gmail.com" class="btn-secondary">✉️ أرسل بريد</a>
+    <div class="quick-contact" data-reveal>
+      <a href="tel:01150335582" class="btn-primary btn-glow">
+        <span>📞 اتصل الآن</span>
+      </a>
+      <a href="https://wa.me/201150335582" target="_blank" class="btn-whatsapp btn-glow">
+        <span>💬 واتساب</span>
+      </a>
+      <a href="mailto:elaqsaoffice@gmail.com" class="btn-ghost light">
+        ✉️ أرسل بريد
+      </a>
     </div>
-
   </div>
 </section>
 
-<!-- ===== الفوتر ===== -->
+<!-- ═══════════════════ Footer ═══════════════════ -->
 <footer>
   <div class="container footer-inner">
+    <div class="footer-brand">
+      <h3>شركة الأقصى للمقاولات العامة</h3>
+      <p>نبني الثقة قبل المباني</p>
+    </div>
+
     <div class="footer-info">
-      <p><strong>شركة الأقصى للمقاولات العامة</strong></p>
       <p>
         📞 <a href="tel:01150335582" class="footer-link" dir="ltr">01150335582</a>
-        &nbsp;|&nbsp;
+      </p>
+      <p>
         ✉️ <a href="mailto:elaqsaoffice@gmail.com" class="footer-link" dir="ltr">elaqsaoffice@gmail.com</a>
       </p>
       <p class="footer-address">
-        📍 المنيا – ميدان الساعة – شارع النقراشي – المتفرع من ابن خصيب – أمام الصياد للأسلحة
+        📍 المنيا – ميدان الساعة – شارع النقراشي<br>
+        المتفرع من ابن خصيب – أمام الصياد للأسلحة
       </p>
     </div>
+
     <p class="copyright">© 2025 شركة الأقصى للمقاولات العامة – جميع الحقوق محفوظة</p>
   </div>
 
   <!-- 🕵️ الزر المخفي -->
   <div id="secretTrigger" class="secret-trigger" title=""></div>
+
+  <!-- Back to top -->
+  <button id="backToTop" class="back-to-top" aria-label="العودة للأعلى">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
 </footer>
 
-<!-- ===== نافذة تسجيل دخول الأدمن ===== -->
+<!-- ═══════════════════ Login Modal ═══════════════════ -->
 <div id="loginModal" class="modal hidden">
-  <div class="modal-content">
-    <h3>🔒 دخول المسؤول</h3>
+  <div class="modal-content login-content">
+    <div class="modal-icon">🔒</div>
+    <h3>دخول المسؤول</h3>
     <input type="password" id="adminPassword" placeholder="كلمة المرور" autocomplete="off">
     <div class="modal-buttons">
       <button id="loginBtn" class="btn-primary">دخول</button>
-      <button id="cancelLogin" class="btn-secondary">إلغاء</button>
+      <button id="cancelLogin" class="btn-ghost">إلغاء</button>
     </div>
     <p id="loginError" class="error hidden">كلمة المرور غير صحيحة</p>
   </div>
 </div>
 
-<!-- ===== لوحة تحكم الأدمن ===== -->
+<!-- ═══════════════════ Admin Panel ═══════════════════ -->
 <div id="adminPanel" class="modal hidden">
   <div class="modal-content admin-content">
     <h3>🛠 لوحة تحكم المسؤول</h3>
 
-    <!-- 🔑 قسم التوكن -->
-    <div class="admin-section" id="tokenSection" style="background:#FFF8E1; border:2px solid #FFC107;">
+    <div class="admin-section" id="tokenSection">
       <h4>🔑 إعداد الاتصال بـ GitHub</h4>
       <p style="font-size:.85rem; color:#666; margin-bottom:12px;">
-        الصق التوكن مرة واحدة، وسيُحفظ في هذا المتصفح فقط (لا يُرفع على GitHub).
+        الصق التوكن مرة واحدة، وسيُحفظ في هذا المتصفح فقط.
       </p>
       <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
       <button id="saveToken" class="btn-primary">💾 حفظ التوكن</button>
       <p id="tokenStatus" style="font-size:.85rem; margin-top:10px;"></p>
-      <hr style="margin-top:15px;">
     </div>
+
+    <hr>
 
     <div class="admin-section">
       <h4>شعار الشركة</h4>
@@ -181,15 +373,12 @@
     </div>
 
     <div class="modal-buttons">
-      <button id="logoutBtn" class="btn-secondary">خروج</button>
-      <button id="closeAdmin" class="btn-secondary">إغلاق</button>
+      <button id="logoutBtn" class="btn-ghost">خروج</button>
+      <button id="closeAdmin" class="btn-ghost">إغلاق</button>
     </div>
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- كود الموقع الكامل - GitHub Mode                              -->
-<!-- ============================================================ -->
 <script>
 (function() {
   'use strict';
@@ -203,33 +392,23 @@
   const IMAGES_FOLDER = "images";
   const DATA_FILE = "projects.json";
 
-  // ════════════════════════════════════════════════════════════
-  // 🔐 الإعدادات الأمنية
-  // ════════════════════════════════════════════════════════════
   const SECRET_CODE = "219";
   const ADMIN_PASSWORD = "AH219##";
 
   // ════════════════════════════════════════════════════════════
-  // 🔑 إدارة التوكن (localStorage)
+  // 🔑 Token management
   // ════════════════════════════════════════════════════════════
-  function getToken() {
-    return localStorage.getItem("alaqsa_github_token") || "";
-  }
-
-  function setToken(token) {
-    localStorage.setItem("alaqsa_github_token", token);
-  }
+  function getToken() { return localStorage.getItem("alaqsa_github_token") || ""; }
+  function setToken(t) { localStorage.setItem("alaqsa_github_token", t); }
 
   // ════════════════════════════════════════════════════════════
-  // 📂 مساعدات GitHub API
+  // 📂 GitHub API
   // ════════════════════════════════════════════════════════════
   const API_BASE = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents`;
 
   function apiHeaders() {
     const token = getToken();
-    if (!token) {
-      throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن وأدخل التوكن أولاً.");
-    }
+    if (!token) throw new Error("❌ لم يتم إعداد التوكن.");
     return {
       "Authorization": `token ${token}`,
       "Accept": "application/vnd.github.v3+json"
@@ -239,10 +418,7 @@
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => {
-        const base64 = reader.result.split(",")[1];
-        resolve(base64);
-      };
+      reader.onload = () => resolve(reader.result.split(",")[1]);
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
@@ -250,11 +426,7 @@
 
   async function uploadToGitHub(path, contentBase64, message) {
     const url = `${API_BASE}/${path}`;
-    const body = {
-      message: message || `رفع ${path}`,
-      content: contentBase64,
-      branch: GITHUB_BRANCH
-    };
+    const body = { message, content: contentBase64, branch: GITHUB_BRANCH };
 
     try {
       const existing = await fetch(url, { headers: apiHeaders() });
@@ -262,7 +434,7 @@
         const data = await existing.json();
         body.sha = data.sha;
       }
-    } catch (e) { /* الملف غير موجود */ }
+    } catch (e) {}
 
     const res = await fetch(url, {
       method: "PUT",
@@ -271,7 +443,7 @@
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ message: "خطأ غير معروف" }));
+      const err = await res.json().catch(() => ({ message: "خطأ" }));
       throw new Error(err.message || "فشل الرفع");
     }
     return await res.json();
@@ -282,26 +454,19 @@
     const res = await fetch(url, { headers: apiHeaders() });
     if (!res.ok) return null;
     const data = await res.json();
-    const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
-    return content;
+    return decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
   }
 
   function getImageUrl(path) {
     return `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 📦 إدارة المشاريع
-  // ════════════════════════════════════════════════════════════
   async function loadProjectsData() {
     try {
       const content = await readFromGitHub(DATA_FILE);
       if (!content) return [];
       return JSON.parse(content);
-    } catch (e) {
-      console.warn("لا يمكن قراءة المشاريع:", e);
-      return [];
-    }
+    } catch (e) { return []; }
   }
 
   async function saveProjectsData(projects) {
@@ -311,7 +476,7 @@
   }
 
   // ════════════════════════════════════════════════════════════
-  // 🖼️ عرض الشعار (بدون إخفاء النص)
+  // 🖼️ Logo
   // ════════════════════════════════════════════════════════════
   async function loadLogo() {
     try {
@@ -322,44 +487,65 @@
           const img = document.getElementById("siteLogo");
           img.src = data.url;
           img.style.display = "block";
-          // لا نخفي النص — نتركه بجانب الشعار
         }
       }
-    } catch (e) { /* لا يوجد شعار بعد */ }
+    } catch (e) {}
   }
 
   // ════════════════════════════════════════════════════════════
-  // 📋 عرض المشاريع
+  // 📋 Projects
   // ════════════════════════════════════════════════════════════
   async function loadProjects() {
     const grid = document.getElementById("projectsGrid");
     if (!grid) return;
 
-    grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#fff;opacity:.7;padding:40px;">⏳ جاري التحميل...</p>`;
+    grid.innerHTML = `<div class="loader-inline"><span></span><span></span><span></span></div>`;
 
     const projects = await loadProjectsData();
     grid.innerHTML = "";
 
     if (projects.length === 0) {
       grid.innerHTML = `
-        <p style="grid-column:1/-1; text-align:center; color:#fff; opacity:.7; padding:40px;">
-          لا توجد مشاريع معروضة حالياً
-        </p>`;
+        <div class="empty-state">
+          <div class="empty-icon">🏗️</div>
+          <p>لا توجد مشاريع معروضة حالياً</p>
+        </div>`;
       return;
     }
 
-    projects.forEach((p) => {
+    projects.forEach((p, idx) => {
       const card = document.createElement("div");
-      card.className = "project-card";
+      card.className = "project-card-pro";
+      card.style.animationDelay = `${idx * 0.1}s`;
+
       card.innerHTML = `
-        <img src="${p.image}" alt="${escapeHtml(p.title)}" loading="lazy">
-        <div class="project-info">
+        <div class="project-image-wrap">
+          <img src="${p.image}" alt="${escapeHtml(p.title)}" loading="lazy">
+          <div class="project-overlay">
+            <div class="project-overlay-content">
+              <span class="project-tag">مشروع منجز</span>
+              <h3>${escapeHtml(p.title)}</h3>
+              <p>${escapeHtml(p.description || "")}</p>
+              <button class="project-view-btn">
+                عرض التفاصيل
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="project-info-pro">
           <h3>${escapeHtml(p.title)}</h3>
           <p>${escapeHtml(p.description || "")}</p>
         </div>
       `;
-      card.addEventListener("click", () => openLightbox(p.image));
+
+      card.addEventListener("click", () => openLightbox(p.image, p.title, p.description));
       grid.appendChild(card);
+    });
+
+    // إعادة تفعيل reveal animation للبطاقات الجديدة
+    document.querySelectorAll('.project-card-pro').forEach((el, i) => {
+      setTimeout(() => el.classList.add('revealed'), i * 100);
     });
   }
 
@@ -371,16 +557,54 @@
       .replace(/"/g, "&quot;");
   }
 
-  function openLightbox(src) {
+  // ════════════════════════════════════════════════════════════
+  // 🔍 Lightbox Pro
+  // ════════════════════════════════════════════════════════════
+  function openLightbox(src, title, desc) {
     const lb = document.createElement("div");
-    lb.className = "lightbox";
-    lb.innerHTML = `<span class="close">&times;</span><img src="${src}">`;
-    lb.addEventListener("click", () => lb.remove());
+    lb.className = "lightbox-pro";
+    lb.innerHTML = `
+      <div class="lightbox-backdrop"></div>
+      <div class="lightbox-content">
+        <button class="lightbox-close" aria-label="إغلاق">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="lightbox-image-wrap">
+          <img src="${src}" alt="${escapeHtml(title || '')}">
+        </div>
+        ${title ? `
+        <div class="lightbox-info">
+          <span class="project-tag">مشروع منجز</span>
+          <h3>${escapeHtml(title)}</h3>
+          ${desc ? `<p>${escapeHtml(desc)}</p>` : ""}
+        </div>` : ""}
+      </div>
+    `;
+
     document.body.appendChild(lb);
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => lb.classList.add("visible"), 10);
+
+    function close() {
+      lb.classList.remove("visible");
+      document.body.style.overflow = "";
+      setTimeout(() => lb.remove(), 300);
+    }
+
+    lb.querySelector(".lightbox-close").addEventListener("click", close);
+    lb.querySelector(".lightbox-backdrop").addEventListener("click", close);
+
+    document.addEventListener("keydown", function esc(e) {
+      if (e.key === "Escape") {
+        close();
+        document.removeEventListener("keydown", esc);
+      }
+    });
   }
 
   // ════════════════════════════════════════════════════════════
-  // 🪟 فتح النوافذ
+  // 🪟 Modals
   // ════════════════════════════════════════════════════════════
   function openLogin() {
     const modal = document.getElementById("loginModal");
@@ -429,24 +653,20 @@
     });
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🔑 ربط أزرار التوكن
-  // ════════════════════════════════════════════════════════════
   function bindTokenUI() {
     const tokenInput = document.getElementById("tokenInput");
     const saveBtn = document.getElementById("saveToken");
     const status = document.getElementById("tokenStatus");
-
     if (!saveBtn) return;
 
     function updateStatus() {
       const token = getToken();
       if (token) {
-        status.textContent = "✅ التوكن محفوظ في هذا المتصفح";
+        status.textContent = "✅ التوكن محفوظ";
         status.style.color = "#2e7d32";
         tokenInput.value = token;
       } else {
-        status.textContent = "⚠️ لم يتم إعداد التوكن بعد — رفع الصور لن يعمل";
+        status.textContent = "⚠️ لم يتم إعداد التوكن";
         status.style.color = "#d33";
       }
     }
@@ -455,7 +675,7 @@
       const token = tokenInput.value.trim();
       if (!token) return alert("أدخل التوكن أولاً");
       if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) {
-        return alert("التوكن غير صالح (يجب أن يبدأ بـ ghp_ أو github_pat_)");
+        return alert("التوكن غير صالح");
       }
 
       saveBtn.textContent = "⏳ جاري التحقق...";
@@ -465,10 +685,10 @@
         const res = await fetch("https://api.github.com/user", {
           headers: { "Authorization": `token ${token}` }
         });
-        if (!res.ok) throw new Error("التوكن غير صحيح أو منتهي");
+        if (!res.ok) throw new Error("التوكن غير صحيح");
 
         setToken(token);
-        alert("✅ تم حفظ التوكن بنجاح");
+        alert("✅ تم حفظ التوكن");
         updateStatus();
       } catch (e) {
         alert("❌ " + e.message);
@@ -481,9 +701,6 @@
     updateStatus();
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🎬 ربط الأزرار
-  // ════════════════════════════════════════════════════════════
   function bindButtons() {
     const loginBtn = document.getElementById("loginBtn");
     const pwd = document.getElementById("adminPassword");
@@ -526,13 +743,12 @@
       document.getElementById("adminPanel").classList.add("hidden");
     });
 
-    // حفظ الشعار
     const saveLogoBtn = document.getElementById("saveLogo");
     if (saveLogoBtn && !saveLogoBtn.dataset.bound) {
       saveLogoBtn.dataset.bound = "1";
       saveLogoBtn.addEventListener("click", async () => {
         const file = document.getElementById("logoUpload").files[0];
-        if (!file) return alert("اختر صورة الشعار أولاً");
+        if (!file) return alert("اختر صورة الشعار");
 
         saveLogoBtn.textContent = "⏳ جاري الرفع...";
         saveLogoBtn.disabled = true;
@@ -542,17 +758,15 @@
           const ext = file.name.split(".").pop();
           const filename = `logo_${Date.now()}.${ext}`;
           const path = `${IMAGES_FOLDER}/${filename}`;
-
-          await uploadToGitHub(path, base64, `رفع الشعار ${filename}`);
-
+          await uploadToGitHub(path, base64, `رفع الشعار`);
           const url = getImageUrl(path);
           const logoJson = btoa(JSON.stringify({ url }));
           await uploadToGitHub("logo.json", logoJson, "تحديث الشعار");
 
-          alert("✅ تم حفظ الشعار بنجاح");
+          alert("✅ تم حفظ الشعار");
           location.reload();
         } catch (e) {
-          alert("❌ خطأ: " + e.message);
+          alert("❌ " + e.message);
         } finally {
           saveLogoBtn.textContent = "حفظ الشعار";
           saveLogoBtn.disabled = false;
@@ -560,7 +774,6 @@
       });
     }
 
-    // إضافة مشروع
     const addBtn = document.getElementById("addProject");
     if (addBtn && !addBtn.dataset.bound) {
       addBtn.dataset.bound = "1";
@@ -569,9 +782,7 @@
         const description = document.getElementById("projDesc").value.trim();
         const files = document.getElementById("projImage").files;
 
-        if (!title || files.length === 0) {
-          return alert("أدخل اسم المشروع وصورة على الأقل");
-        }
+        if (!title || files.length === 0) return alert("أدخل الاسم والصورة");
 
         addBtn.textContent = "⏳ جاري الرفع...";
         addBtn.disabled = true;
@@ -588,17 +799,12 @@
             await uploadToGitHub(path, base64, `رفع مشروع: ${title}`);
             const url = getImageUrl(path);
 
-            projects.push({
-              title,
-              description,
-              image: url,
-              createdAt: Date.now()
-            });
+            projects.push({ title, description, image: url, createdAt: Date.now() });
           }
 
           await saveProjectsData(projects);
 
-          alert("✅ تم إضافة المشروع بنجاح");
+          alert("✅ تم إضافة المشروع");
           document.getElementById("projTitle").value = "";
           document.getElementById("projDesc").value = "";
           document.getElementById("projImage").value = "";
@@ -606,7 +812,7 @@
           await loadProjects();
           await renderAdminProjects();
         } catch (e) {
-          alert("❌ خطأ: " + e.message);
+          alert("❌ " + e.message);
         } finally {
           addBtn.textContent = "إضافة المشروع";
           addBtn.disabled = false;
@@ -616,7 +822,7 @@
   }
 
   // ════════════════════════════════════════════════════════════
-  // ⌨️ كتابة 219 للدخول
+  // ⌨️ Secret Code 219
   // ════════════════════════════════════════════════════════════
   let typedBuffer = "";
   let typedTimer = null;
@@ -630,18 +836,14 @@
     if (e.key === "*" || e.key === "ذ" || e.key === "×") {
       typedBuffer = "";
       clearTimeout(typedTimer);
-      console.log("🔄 تم تصفير البافر");
       return;
     }
 
     if (e.key.length === 1 && /[0-9]/.test(e.key)) {
       typedBuffer += e.key;
-      console.log("📝 البافر:", typedBuffer);
-
       if (typedBuffer.length > 10) typedBuffer = typedBuffer.slice(-10);
 
       if (typedBuffer.indexOf(SECRET_CODE) !== -1) {
-        console.log("✅ تم اكتشاف 219 - فتح نافذة الدخول");
         typedBuffer = "";
         openLogin();
         return;
@@ -653,7 +855,7 @@
   });
 
   // ════════════════════════════════════════════════════════════
-  // 🕵️ الزر المخفي
+  // 🕵️ Secret Trigger
   // ════════════════════════════════════════════════════════════
   function bindSecretTrigger() {
     const trigger = document.getElementById("secretTrigger");
@@ -680,17 +882,297 @@
   }
 
   // ════════════════════════════════════════════════════════════
-  // 🚀 بدء التشغيل
+  // 🎭 Reveal on Scroll
+  // ════════════════════════════════════════════════════════════
+  function initReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -100px 0px" });
+
+    document.querySelectorAll("[data-reveal]").forEach(el => observer.observe(el));
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🔢 Count Up Numbers
+  // ════════════════════════════════════════════════════════════
+  function initCountUp() {
+    const counters = document.querySelectorAll("[data-count]");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count);
+          const duration = 2000;
+          const step = target / (duration / 16);
+          let current = 0;
+
+          const update = () => {
+            current += step;
+            if (current < target) {
+              el.textContent = Math.floor(current);
+              requestAnimationFrame(update);
+            } else {
+              el.textContent = target;
+            }
+          };
+          update();
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(el => observer.observe(el));
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🖱️ Custom Cursor
+  // ════════════════════════════════════════════════════════════
+  function initCursor() {
+    if (window.innerWidth < 1024) return;
+
+    const dot = document.querySelector(".cursor-dot");
+    const outline = document.querySelector(".cursor-outline");
+    if (!dot || !outline) return;
+
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left = mouseX + "px";
+      dot.style.top = mouseY + "px";
+    });
+
+    function animateOutline() {
+      outlineX += (mouseX - outlineX) * 0.15;
+      outlineY += (mouseY - outlineY) * 0.15;
+      outline.style.left = outlineX + "px";
+      outline.style.top = outlineY + "px";
+      requestAnimationFrame(animateOutline);
+    }
+    animateOutline();
+
+    // تفاعل مع العناصر
+    document.querySelectorAll("a, button, .project-card-pro, [data-tilt]").forEach(el => {
+      el.addEventListener("mouseenter", () => outline.classList.add("grow"));
+      el.addEventListener("mouseleave", () => outline.classList.remove("grow"));
+    });
+
+    // إعادة ربط للعناصر الديناميكية
+    const observer = new MutationObserver(() => {
+      document.querySelectorAll("a:not([data-cursor-bound]), button:not([data-cursor-bound]), .project-card-pro:not([data-cursor-bound])").forEach(el => {
+        el.dataset.cursorBound = "1";
+        el.addEventListener("mouseenter", () => outline.classList.add("grow"));
+        el.addEventListener("mouseleave", () => outline.classList.remove("grow"));
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 💫 3D Tilt Effect
+  // ════════════════════════════════════════════════════════════
+  function initTilt() {
+    if (window.innerWidth < 1024) return;
+
+    document.addEventListener("mousemove", (e) => {
+      document.querySelectorAll("[data-tilt]").forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (x < -50 || x > rect.width + 50 || y < -50 || y > rect.height + 50) {
+          el.style.transform = "";
+          return;
+        }
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+
+        el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+      });
+    });
+
+    document.querySelectorAll("[data-tilt]").forEach(el => {
+      el.addEventListener("mouseleave", () => {
+        el.style.transform = "";
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🌊 Parallax
+  // ════════════════════════════════════════════════════════════
+  function initParallax() {
+    const hero = document.querySelector(".hero-content");
+    if (!hero) return;
+
+    window.addEventListener("scroll", () => {
+      const scroll = window.scrollY;
+      if (scroll < window.innerHeight) {
+        hero.style.transform = `translateY(${scroll * 0.3}px)`;
+        hero.style.opacity = 1 - (scroll / window.innerHeight) * 0.8;
+      }
+    }, { passive: true });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 📊 Scroll Progress + Back to Top
+  // ════════════════════════════════════════════════════════════
+  function initScrollProgress() {
+    const bar = document.getElementById("scrollProgress");
+    const backBtn = document.getElementById("backToTop");
+
+    window.addEventListener("scroll", () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = (window.scrollY / h) * 100;
+      if (bar) bar.style.width = scrolled + "%";
+
+      if (backBtn) {
+        if (window.scrollY > 500) backBtn.classList.add("visible");
+        else backBtn.classList.remove("visible");
+      }
+    }, { passive: true });
+
+    backBtn?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // ✨ Particles
+  // ════════════════════════════════════════════════════════════
+  function initParticles() {
+    const container = document.getElementById("particles");
+    if (!container) return;
+
+    const count = window.innerWidth < 768 ? 15 : 30;
+
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      p.style.left = Math.random() * 100 + "%";
+      p.style.animationDelay = Math.random() * 15 + "s";
+      p.style.animationDuration = (10 + Math.random() * 15) + "s";
+      p.style.opacity = 0.3 + Math.random() * 0.5;
+      p.style.width = p.style.height = (2 + Math.random() * 4) + "px";
+      container.appendChild(p);
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🎬 Preloader
+  // ════════════════════════════════════════════════════════════
+  function initPreloader() {
+    const preloader = document.getElementById("preloader");
+    if (!preloader) return;
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        preloader.classList.add("done");
+        setTimeout(() => {
+          preloader.style.display = "none";
+          document.body.classList.add("loaded");
+        }, 800);
+      }, 1200);
+    });
+
+    // Failsafe
+    setTimeout(() => {
+      preloader.classList.add("done");
+      setTimeout(() => {
+        preloader.style.display = "none";
+        document.body.classList.add("loaded");
+      }, 800);
+    }, 4000);
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🍔 Mobile Menu
+  // ════════════════════════════════════════════════════════════
+  function initMobileMenu() {
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".main-nav");
+    if (!toggle || !nav) return;
+
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("open");
+      toggle.classList.toggle("active");
+    });
+
+    nav.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => {
+        nav.classList.remove("open");
+        toggle.classList.remove("active");
+      });
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 📌 Header on Scroll
+  // ════════════════════════════════════════════════════════════
+  function initHeaderScroll() {
+    const header = document.getElementById("header");
+    if (!header) return;
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 100) header.classList.add("scrolled");
+      else header.classList.remove("scrolled");
+    }, { passive: true });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🎯 Active Nav Link
+  // ════════════════════════════════════════════════════════════
+  function initActiveNav() {
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach(s => {
+        const sectionTop = s.offsetTop - 200;
+        if (window.scrollY >= sectionTop) current = s.id;
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove("active");
+        if (link.getAttribute("href") === `#${current}`) {
+          link.classList.add("active");
+        }
+      });
+    }, { passive: true });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 🚀 Init
   // ════════════════════════════════════════════════════════════
   function init() {
     bindButtons();
     bindTokenUI();
     bindSecretTrigger();
+    initReveal();
+    initCountUp();
+    initCursor();
+    initTilt();
+    initParallax();
+    initScrollProgress();
+    initParticles();
+    initPreloader();
+    initMobileMenu();
+    initHeaderScroll();
+    initActiveNav();
     loadLogo();
     loadProjects();
-    console.log("✅ الموقع جاهز - GitHub Mode");
-    console.log("👤 المستخدم:", GITHUB_USERNAME);
-    console.log("📦 المستودع:", GITHUB_REPO);
+    console.log("✨ الموقع جاهز — GitHub Mode");
   }
 
   if (document.readyState === "loading") {
