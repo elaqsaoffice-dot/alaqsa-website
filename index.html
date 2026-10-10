@@ -199,7 +199,14 @@
   const GITHUB_USERNAME = "elaqsaoffice-dot";         // ← اسمك على GitHub
   const GITHUB_REPO = "alaqsa-website";            // ← اسم المستودع
   const GITHUB_BRANCH = "main";                    // ← الفرع الرئيسي
-  const GITHUB_TOKEN = "";  // ← فارغ! الأدمن يدخله من الواجهة        // ← التوكن (سننشئه لاحقاً)
+ // 🔑 التوكن يُقرأ من localStorage (لا يُرفع على GitHub)
+function getToken() {
+  return localStorage.getItem("alaqsa_github_token") || "";
+}
+
+function setToken(token) {
+  localStorage.setItem("alaqsa_github_token", token);
+}       // ← التوكن (سننشئه لاحقاً)
   const IMAGES_FOLDER = "images";                  // ← مجلد الصور
   const DATA_FILE = "projects.json";               // ← ملف بيانات المشاريع
 
