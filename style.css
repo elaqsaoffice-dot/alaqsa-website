@@ -169,6 +169,11 @@ img {
   object-fit: contain;
   transition: height 0.3s var(--ease);
   flex-shrink: 0;
+  display: block;
+  /* تحسينات للهاتف */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  will-change: height;
 }
 
 #header.scrolled .logo-img {
