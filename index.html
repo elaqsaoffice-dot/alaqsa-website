@@ -2,9 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="شركة الأقصى للمقاولات العامة - المنيا">
 <meta name="theme-color" content="#0A4DA6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>شركة الأقصى للمقاولات العامة | Al-Aqsa General Contracting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +66,7 @@
     <div class="hero-contacts">
       <a href="tel:01150335582" class="hero-chip">📞 01150335582</a>
       <a href="mailto:elaqsaoffice@gmail.com" class="hero-chip">✉️ elaqsaoffice@gmail.com</a>
-      <a href="https://www.google.com/maps/search/المنيا+ميدان+الساعة" target="_blank" class="hero-chip">📍 المنيا – ميدان الساعة – أمام الصياد للأسلحة</a>
+      <a href="https://www.google.com/maps/search/المنيا+ميدان+الساعة" target="_blank" class="hero-chip">📍 المنيا – ميدان الساعة</a>
     </div>
 
     <div class="hero-buttons">
@@ -322,7 +324,6 @@
 (function() {
   'use strict';
 
-  // ═══════════════════ الإعدادات ═══════════════════
   const GITHUB_USERNAME = "elaqsaoffice-dot";
   const GITHUB_REPO = "alaqsa-website";
   const GITHUB_BRANCH = "main";
@@ -332,16 +333,14 @@
   const SECRET_CODE = "219";
   const ADMIN_PASSWORD = "AH219##";
 
-  // ═══════════════════ Token ═══════════════════
   function getToken() { return localStorage.getItem("alaqsa_github_token") || ""; }
   function setToken(t) { localStorage.setItem("alaqsa_github_token", t); }
 
-  // ═══════════════════ GitHub API ═══════════════════
   const API_BASE = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents`;
 
   function apiHeaders() {
     const token = getToken();
-    if (!token) throw new Error("❌ لم يتم إعداد التوكن. افتح لوحة الأدمن.");
+    if (!token) throw new Error("❌ لم يتم إعداد التوكن.");
     return {
       "Authorization": `token ${token}`,
       "Accept": "application/vnd.github.v3+json"
@@ -394,7 +393,6 @@
     return `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
   }
 
-  // ═══════════════════ Projects Data ═══════════════════
   async function loadProjectsData() {
     try {
       const content = await readFromGitHub(DATA_FILE);
@@ -409,7 +407,6 @@
     await uploadToGitHub(DATA_FILE, content, "تحديث المشاريع");
   }
 
-  // ═══════════════════ Logo ═══════════════════
   async function loadLogo() {
     try {
       const content = await readFromGitHub("logo.json");
@@ -424,7 +421,6 @@
     } catch (e) {}
   }
 
-  // ═══════════════════ Projects Display ═══════════════════
   async function loadProjects() {
     const grid = document.getElementById("projectsGrid");
     if (!grid) return;
@@ -475,7 +471,6 @@
       .replace(/"/g, "&quot;");
   }
 
-  // ═══════════════════ Lightbox ═══════════════════
   function openLightbox(src, title, desc) {
     const lb = document.createElement("div");
     lb.className = "lightbox";
@@ -513,7 +508,6 @@
     });
   }
 
-  // ═══════════════════ Modals ═══════════════════
   function openLogin() {
     const modal = document.getElementById("loginModal");
     const pwd = document.getElementById("adminPassword");
@@ -561,7 +555,6 @@
     });
   }
 
-  // ═══════════════════ Token UI ═══════════════════
   function bindTokenUI() {
     const tokenInput = document.getElementById("tokenInput");
     const saveBtn = document.getElementById("saveToken");
@@ -610,7 +603,6 @@
     updateStatus();
   }
 
-  // ═══════════════════ Buttons ═══════════════════
   function bindButtons() {
     const loginBtn = document.getElementById("loginBtn");
     const pwd = document.getElementById("adminPassword");
@@ -651,7 +643,6 @@
       document.getElementById("adminPanel").classList.add("hidden");
     });
 
-    // Save Logo
     const saveLogoBtn = document.getElementById("saveLogo");
     if (saveLogoBtn) {
       saveLogoBtn.addEventListener("click", async () => {
@@ -682,7 +673,6 @@
       });
     }
 
-    // Add Project
     const addBtn = document.getElementById("addProject");
     if (addBtn) {
       addBtn.addEventListener("click", async () => {
@@ -729,7 +719,6 @@
     }
   }
 
-  // ═══════════════════ Secret Code ═══════════════════
   let typedBuffer = "";
   let typedTimer = null;
 
@@ -760,7 +749,6 @@
     }
   });
 
-  // ═══════════════════ Secret Trigger ═══════════════════
   function bindSecretTrigger() {
     const trigger = document.getElementById("secretTrigger");
     if (!trigger) return;
@@ -785,7 +773,6 @@
     });
   }
 
-  // ═══════════════════ Count Up ═══════════════════
   function initCountUp() {
     const counters = document.querySelectorAll("[data-count]");
     if (!counters.length) return;
@@ -815,7 +802,6 @@
     counters.forEach(el => observer.observe(el));
   }
 
-  // ═══════════════════ Scroll Progress ═══════════════════
   function initScrollProgress() {
     const bar = document.getElementById("scrollProgress");
     const backBtn = document.getElementById("backToTop");
@@ -836,7 +822,6 @@
     });
   }
 
-  // ═══════════════════ Preloader ═══════════════════
   function initPreloader() {
     const preloader = document.getElementById("preloader");
     if (!preloader) return;
@@ -856,7 +841,6 @@
     }
   }
 
-  // ═══════════════════ Mobile Menu ═══════════════════
   function initMobileMenu() {
     const toggle = document.getElementById("menuToggle");
     const nav = document.getElementById("mainNav");
@@ -873,9 +857,16 @@
         toggle.classList.remove("active");
       });
     });
+
+    // إغلاق القائمة عند الضغط خارجها
+    document.addEventListener("click", (e) => {
+      if (nav.classList.contains("open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove("open");
+        toggle.classList.remove("active");
+      }
+    });
   }
 
-  // ═══════════════════ Header Scroll ═══════════════════
   function initHeaderScroll() {
     const header = document.getElementById("header");
     if (!header) return;
@@ -893,7 +884,6 @@
     }, { passive: true });
   }
 
-  // ═══════════════════ Active Nav ═══════════════════
   function initActiveNav() {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -912,7 +902,6 @@
     }, { passive: true });
   }
 
-  // ═══════════════════ Init ═══════════════════
   function init() {
     bindButtons();
     bindTokenUI();
