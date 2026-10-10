@@ -697,8 +697,9 @@ function bindTokenUI() {
 
   updateStatus();
 }
-  function init() {
-    bindButtons();
+ function init() {
+  bindButtons();
+  bindTokenUI();   // ← أضف هذا السطر
     bindSecretTrigger();
     loadLogo();
     loadProjects();
