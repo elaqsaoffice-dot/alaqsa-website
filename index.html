@@ -27,7 +27,10 @@
     <div class="logo-area">
       <img id="siteLogo" src="" alt="شعار الشركة" class="logo-img" style="display:none;">
       <div class="logo-text">
-        <h1>شركة الأقصى للمقاولات العامة</h1>
+        <h1>
+          <span class="logo-full">شركة الأقصى للمقاولات العامة</span>
+          <span class="logo-short">الأقصى للمقاولات</span>
+        </h1>
       </div>
     </div>
 
@@ -371,7 +374,7 @@
     return await res.json();
   }
 
-  // قراءة ملف من GitHub بدون توكن — من GitHub Pages أو jsDelivr
+  // قراءة ملف بدون توكن
   async function readPublicFile(path) {
     const urls = [
       `https://elaqsaoffice-dot.github.io/alaqsa-website/${path}?t=${Date.now()}`,
@@ -382,12 +385,12 @@
       try {
         const res = await fetch(url);
         if (res.ok) return await res.text();
-      } catch (e) { /* جرب الرابط التالي */ }
+      } catch (e) {}
     }
     return null;
   }
 
-  // قراءة ملف من GitHub مع توكن (للأدمن فقط)
+  // قراءة ملف مع توكن (للأدمن)
   async function readFromGitHub(path) {
     const url = `${API_BASE}/${path}?t=${Date.now()}`;
     const res = await fetch(url, { headers: apiHeaders() });
@@ -404,24 +407,30 @@
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USERNAME}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
   }
 
+  function toCDN(url) {
+    if (url && url.includes("raw.githubusercontent.com")) {
+      return url
+        .replace("https://raw.githubusercontent.com/", "https://cdn.jsdelivr.net/gh/")
+        .replace(`/${GITHUB_BRANCH}/`, `@${GITHUB_BRANCH}/`);
+    }
+    return url;
+  }
+
   // ═══════════════════ Logo ═══════════════════
-  function loadLogoImage(url, img, logoText) {
+  function loadLogoImage(url, img) {
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
         console.warn("⏱ انتهت مهلة تحميل الشعار");
         img.style.display = "none";
-        if (logoText) logoText.style.display = "block";
         resolve(false);
       }, 8000);
 
       img.onload = () => {
         clearTimeout(timeout);
         img.style.display = "block";
-        if (logoText) logoText.style.display = "none";
         console.log("✅ تم تحميل الشعار");
         resolve(true);
 
-        // حفظ في localStorage
         try {
           fetch(url)
             .then(r => r.blob())
@@ -443,7 +452,6 @@
         clearTimeout(timeout);
         console.warn("⚠️ فشل تحميل الشعار من:", url);
         img.style.display = "none";
-        if (logoText) logoText.style.display = "block";
         resolve(false);
       };
 
@@ -453,33 +461,23 @@
 
   async function loadLogo() {
     const img = document.getElementById("siteLogo");
-    const logoText = document.querySelector(".logo-text");
     if (!img) return;
 
-    // 1) localStorage أولاً
     const cached = localStorage.getItem("alaqsa_logo_data");
     if (cached && cached.length > 100) {
       img.src = cached;
       img.style.display = "block";
-      if (logoText) logoText.style.display = "none";
       console.log("✅ الشعار من localStorage");
       return;
     }
 
-    // 2) اقرأ logo.json بدون توكن
     try {
       const content = await readPublicFile("logo.json");
       if (content) {
         const data = JSON.parse(content);
         if (data && data.url) {
-          // حوّل الرابط إلى jsDelivr للأداء الأفضل
-          let logoUrl = data.url;
-          if (logoUrl.includes("raw.githubusercontent.com")) {
-            logoUrl = logoUrl
-              .replace("https://raw.githubusercontent.com/", "https://cdn.jsdelivr.net/gh/")
-              .replace(`/${GITHUB_BRANCH}/`, `@${GITHUB_BRANCH}/`);
-          }
-          const success = await loadLogoImage(logoUrl, img, logoText);
+          const logoUrl = toCDN(data.url);
+          const success = await loadLogoImage(logoUrl, img);
           if (success) return;
         }
       }
@@ -487,10 +485,9 @@
       console.warn("فشل قراءة logo.json:", e);
     }
 
-    // 3) احتياطي
     console.warn("⚠️ استخدام الرابط الاحتياطي");
     const fallback = getImageUrlCDN("images/logo_1791627223517.png");
-    await loadLogoImage(fallback, img, logoText);
+    await loadLogoImage(fallback, img);
   }
 
   // ═══════════════════ Projects Data ═══════════════════
@@ -538,13 +535,7 @@
       const card = document.createElement("div");
       card.className = "project-card";
 
-      // تحويل الرابط إلى jsDelivr للأداء
-      let imgUrl = p.image;
-      if (imgUrl.includes("raw.githubusercontent.com")) {
-        imgUrl = imgUrl
-          .replace("https://raw.githubusercontent.com/", "https://cdn.jsdelivr.net/gh/")
-          .replace(`/${GITHUB_BRANCH}/`, `@${GITHUB_BRANCH}/`);
-      }
+      const imgUrl = toCDN(p.image);
 
       card.innerHTML = `
         <div class="project-image">
@@ -770,7 +761,6 @@
           const logoJson = btoa(JSON.stringify({ url }));
           await uploadToGitHub("logo.json", logoJson, "تحديث الشعار");
 
-          // حفظ في localStorage مباشرة
           try {
             localStorage.setItem("alaqsa_logo_data", `data:image/${ext};base64,${base64}`);
           } catch (e) {}
