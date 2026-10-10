@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="شركة الأقصى للمقاولات العامة - المنيا - خبرة وإتقان في تنفيذ المشاريع الإنشائية">
-<title>الأقصى للمقاولات العامة | Al-Aqsa General Contracting</title>
+<title>شركة الأقصى للمقاولات العامة | Al-Aqsa General Contracting</title>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 </head>
@@ -16,8 +16,7 @@
     <div class="logo-area">
       <img id="siteLogo" src="" alt="شعار الشركة" class="logo-img" style="display:none;">
       <div class="logo-text">
-        <h1>الأقصى للمقاولات العامة</h1>
-        <span>Al-Aqsa General Contracting</span>
+        <h1>شركة الأقصى للمقاولات العامة</h1>
       </div>
     </div>
     <nav>
@@ -111,7 +110,7 @@
 <footer>
   <div class="container footer-inner">
     <div class="footer-info">
-      <p><strong>الأقصى للمقاولات العامة</strong></p>
+      <p><strong>شركة الأقصى للمقاولات العامة</strong></p>
       <p>
         📞 <a href="tel:01150335582" class="footer-link" dir="ltr">01150335582</a>
         &nbsp;|&nbsp;
@@ -121,7 +120,7 @@
         📍 المنيا – ميدان الساعة – شارع النقراشي – المتفرع من ابن خصيب – أمام الصياد للأسلحة
       </p>
     </div>
-    <p class="copyright">© 2025 الأقصى للمقاولات العامة – جميع الحقوق محفوظة</p>
+    <p class="copyright">© 2025 شركة الأقصى للمقاولات العامة – جميع الحقوق محفوظة</p>
   </div>
 
   <!-- 🕵️ الزر المخفي -->
@@ -189,7 +188,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- كود الموقع الكامل - GitHub Mode (نسخة نظيفة بدون أخطاء)      -->
+<!-- كود الموقع الكامل - GitHub Mode                              -->
 <!-- ============================================================ -->
 <script>
 (function() {
@@ -312,7 +311,7 @@
   }
 
   // ════════════════════════════════════════════════════════════
-  // 🖼️ عرض الشعار
+  // 🖼️ عرض الشعار (بدون إخفاء النص)
   // ════════════════════════════════════════════════════════════
   async function loadLogo() {
     try {
@@ -323,7 +322,7 @@
           const img = document.getElementById("siteLogo");
           img.src = data.url;
           img.style.display = "block";
-          document.querySelector(".logo-text").style.display = "none";
+          // لا نخفي النص — نتركه بجانب الشعار
         }
       }
     } catch (e) { /* لا يوجد شعار بعد */ }
